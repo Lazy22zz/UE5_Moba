@@ -16,6 +16,8 @@ class ACPlayerCharacter : public ACCharacter
 	
 public:
 	ACPlayerCharacter();
+	virtual void PawnClientRestart() override;
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
 	UPROPERTY(VisibleDefaultsOnly, Category = "View")
@@ -23,4 +25,10 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "View")
 	class UCameraComponent* ViewCam;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputMappingContext* GameplayInputMappingContext;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* JumpInputAction;
 };

@@ -16,3 +16,9 @@ UE5-MOBA MULTIPLAYER ONLINE
 - 4, Add the look Input Action
      1, [code view](https://github.com/Lazy22zz/UE5_Moba/commit/4bd94ba7b4fdfbb07e7d70b58e38ac3c6b9945f0)
      2, Assign the IA_Look in BP_Character.
+  
+- 5, Add the Move Input Action
+     1, [code view](https://github.com/Lazy22zz/UE5_Moba/commit/74f5d7e9db7afa5d82c2f775f2cb485873664e46)
+     2, <img width="1055" height="678" alt="Screenshot 2025-09-10 192605" src="https://github.com/user-attachments/assets/68149941-20c7-4a3b-a05a-5eddc639abf3" />
+
+- 6, 

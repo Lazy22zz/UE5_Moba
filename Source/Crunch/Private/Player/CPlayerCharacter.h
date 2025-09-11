@@ -36,5 +36,13 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* LookInputAction;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* MoveInputAction;
+
 	void HandleLookInputAction(const FInputActionValue& InputAction);
+	void HandleMoveInputAction(const FInputActionValue& InputAction);
+
+	FVector GetLookRightDir() const;
+	FVector GetLookfwdDir() const;
+	FVector GetMovefwdDir() const;
 };

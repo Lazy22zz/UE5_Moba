@@ -27,6 +27,15 @@ public:
 	// for linked anim instances, only called when the hosting node(s) are relevant
 	virtual void NativeThreadSafeUpdateAnimation(float DeltaSeconds) override;
 
+	UFUNCTION(Blueprintcallable, meta = (BlueprintThreadSafe))
+	FORCEINLINE float Getspeed() const { return Speed; }
+
+	UFUNCTION(Blueprintcallable, meta = (BlueprintThreadSafe))
+	FORCEINLINE bool IsMoving() const { return Speed != 0; }
+
+	UFUNCTION(BlueprintCallable, meta = (BlueprintThreadSafe))
+	FORCEINLINE bool IsnotMoving() const { return Speed == 0; }
+
 private:
 	UPROPERTY()
 	class ACharacter* OwnerCharacter;
@@ -34,5 +43,5 @@ private:
 	UPROPERTY()
 	class UCharacterMovementComponent* OwnerMovementComp;
 
-
+	float Speed;
 };

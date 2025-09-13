@@ -26,3 +26,8 @@ UE5-MOBA MULTIPLAYER ONLINE
      2. Create a new Animation Instance.
      3. <img width="532" height="74" alt="Screenshot 2025-09-11 201706" src="https://github.com/user-attachments/assets/f9d2031f-b9c2-4f64-843f-321f2e89c7da" />
 
+- 7, Add Speed Attribute to Drive Ground Locomotion
+     1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/00f1589532965f06edd250c280acdd0421c2349a)
+     2. Set an automatic rule. <img width="525" height="34" alt="Screenshot 2025-09-12 202156" src="https://github.com/user-attachments/assets/dc63bca5-9814-472b-875c-341a772a87f3" />
+     3. Using Group to smooth animations. <img width="519" height="108" alt="Screenshot 2025-09-12 202319" src="https://github.com/user-attachments/assets/3cbf344d-fcb1-43e6-a7bf-b229bc915385" />
+

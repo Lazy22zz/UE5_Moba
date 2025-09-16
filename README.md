@@ -31,3 +31,8 @@ UE5-MOBA MULTIPLAYER ONLINE
      2. Set an automatic rule. <img width="525" height="34" alt="Screenshot 2025-09-12 202156" src="https://github.com/user-attachments/assets/dc63bca5-9814-472b-875c-341a772a87f3" />
      3. Using Group to smooth animations. <img width="519" height="108" alt="Screenshot 2025-09-12 202319" src="https://github.com/user-attachments/assets/3cbf344d-fcb1-43e6-a7bf-b229bc915385" />
 
+- 8, Add Jog Stop And Jog Lean
+     1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/5ddf44e7ab32cd4cc8aaeaab303af7a15f404342)
+     2. Add new jog stop state, and new BS_JogLean.
+ 
+ - 9, 

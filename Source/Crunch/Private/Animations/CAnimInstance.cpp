@@ -28,6 +28,12 @@ void UCAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		SmoothedYawSpeed = UKismetMathLibrary::FInterpTo(SmoothedYawSpeed, YawSpeed, DeltaSeconds, YawSpeedSmoothLerpSpeed);
 
 	}
+
+	if (OwnerMovementComp)
+	{
+		bIsJumping = OwnerMovementComp->IsFalling();
+	}
+
 }
 
 void UCAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)

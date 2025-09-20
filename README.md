@@ -43,6 +43,12 @@ UE5-MOBA MULTIPLAYER ONLINE
      1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/2d75d24f79b3ccec390462816fb4c0048731f98c)
      2. Create the new Look Offset and Add it into BS.
         <img width="704" height="333" alt="Screenshot 2025-09-18 201727" src="https://github.com/user-attachments/assets/d61eb977-6b82-4cc2-a898-3973a556bb03" />
+        
+- 11, Add Foot Rig Control Do Foot Tracing
+     1. Enable the Foot Trace.(using rig to track two foots to grounds location.)
+     2. <img width="1081" height="505" alt="Screenshot 2025-09-19 203949" src="https://github.com/user-attachments/assets/a3b52f90-f44d-494f-b8a3-145e2a913879" />
+     3. <img width="1043" height="267" alt="Screenshot 2025-09-19 203935" src="https://github.com/user-attachments/assets/5336acad-f64a-4d36-b0a7-28cfcdcf44b8" />
+
 
  
 

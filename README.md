@@ -38,3 +38,12 @@ UE5-MOBA MULTIPLAYER ONLINE
 - 9, Add Jumping Animations
      1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/8daf980f3738ffc9fabb30b265aba34e789c7694)
      2. Add a new state machine about jumping (jump start -> jump fall)-> jemp recovery -> on ground animations.
+
+- 10, Add Look Offset
+     1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/2d75d24f79b3ccec390462816fb4c0048731f98c)
+     2. Create the new Look Offset and Add it into BS.
+        <img width="704" height="333" alt="Screenshot 2025-09-18 201727" src="https://github.com/user-attachments/assets/d61eb977-6b82-4cc2-a898-3973a556bb03" />
+
+ 
+
+        

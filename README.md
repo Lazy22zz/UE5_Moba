@@ -34,7 +34,7 @@ UE5-MOBA MULTIPLAYER ONLINE
 - 8, Add Jog Stop And Jog Lean
      1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/5ddf44e7ab32cd4cc8aaeaab303af7a15f404342)
      2. Add new jog stop state, and new BS_JogLean.
- 
+
 - 9, Add Jumping Animations
      1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/8daf980f3738ffc9fabb30b265aba34e789c7694)
      2. Add a new state machine about jumping (jump start -> jump fall)-> jemp recovery -> on ground animations.
@@ -49,7 +49,8 @@ UE5-MOBA MULTIPLAYER ONLINE
      2. <img width="1081" height="505" alt="Screenshot 2025-09-19 203949" src="https://github.com/user-attachments/assets/a3b52f90-f44d-494f-b8a3-145e2a913879" />
      3. <img width="1043" height="267" alt="Screenshot 2025-09-19 203935" src="https://github.com/user-attachments/assets/5336acad-f64a-4d36-b0a7-28cfcdcf44b8" />
 
-
+- 12, Smooth foot trace location and Modify transform
+     1. <img width="1302" height="672" alt="Screenshot 2025-09-20 175734" src="https://github.com/user-attachments/assets/dbf41731-486f-429b-8571-d5ec3c9cd90e" />
  
 
         

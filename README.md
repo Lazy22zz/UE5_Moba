@@ -54,7 +54,7 @@ UE5-MOBA MULTIPLAYER ONLINE
 
 - 13, Add Foot IK
      1. fill up add foot IK and use a boolean to detect when is not on ground, the Zoffset set to 0.
-     <img width="758" height="585" alt="Screenshot 2025-09-21 185657" src="https://github.com/user-attachments/assets/ccdc7a31-0995-4b3f-b7bd-5e37a8b56d88" />
+     <img width="758" height="585" alt="Screenshot 2025-09-21 185657" src="https://github.com/user-attachments/assets/ccdc7a31-0995-4b3f-b7bd-5e37a8b56d88" />\
      2. In the BS, use is on ground to detect the boolean.
      <img width="684" height="220" alt="Screenshot 2025-09-21 185649" src="https://github.com/user-attachments/assets/881469a6-ade2-4954-8cab-503664add46b" />
 

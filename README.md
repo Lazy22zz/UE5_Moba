@@ -51,6 +51,13 @@ UE5-MOBA MULTIPLAYER ONLINE
 
 - 12, Smooth foot trace location and Modify transform
      1. <img width="1302" height="672" alt="Screenshot 2025-09-20 175734" src="https://github.com/user-attachments/assets/dbf41731-486f-429b-8571-d5ec3c9cd90e" />
- 
+
+- 13, Add Foot IK
+     1. fill up add foot IK and use a boolean to detect when is not on ground, the Zoffset set to 0.
+     <img width="1302" height="672" alt="Screenshot 2025-09-20 175734" src="https://github.com/user-attachments/assets/5d9cefb1-9fa9-4bc9-94ed-68d20c6546a5" />
+     2. In the BS, use is on ground to detect the boolean.
+     <img width="684" height="220" alt="Screenshot 2025-09-21 185649" src="https://github.com/user-attachments/assets/881469a6-ade2-4954-8cab-503664add46b" />
+
+
 
         

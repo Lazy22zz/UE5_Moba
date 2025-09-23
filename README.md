@@ -61,6 +61,7 @@ UE5-MOBA MULTIPLAYER ONLINE
 - 14, Add Abilitysystemcomponent
      1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/a7526eb9afeed6dcda7873a3ddde3e0d28a2f71d)
      2. remember that override for getabilitysystemcomponent().
+     3. Fix code issue: [code view](https://github.com/Lazy22zz/UE5_Moba/commit/d39f21f08decf354041bfc6c5b565e7105311988)
  
  
 

@@ -4,6 +4,7 @@
 #include "Character/CCharacter.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "GAS/CAbilitySystemComponent.h"
+#include "GAS/CAttributeSet.h"
 
 
 // Sets default values

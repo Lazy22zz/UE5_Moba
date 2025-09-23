@@ -2,13 +2,14 @@
 
 #pragma once
 
+
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
 #include "CCharacter.generated.h"
 
 UCLASS()
-class ACCharacter : public ACharacter, public AbilitySystemInterface 
+class ACCharacter : public ACharacter, public IAbilitySystemInterface 
 {
 	GENERATED_BODY()
 

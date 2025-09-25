@@ -63,8 +63,9 @@ UE5-MOBA MULTIPLAYER ONLINE
      2. remember that override for getabilitysystemcomponent().
      3. Fix code issue: [code view](https://github.com/Lazy22zz/UE5_Moba/commit/d39f21f08decf354041bfc6c5b565e7105311988)
 
- - 15, Add Attribute Health, Mana
+- 15, Add Attribute Health, Mana
     1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/fc4fa8e32c6e9ecc63221471365f5541f3851ec0)
 
-
+- 16, Apply Gameplay Effect to GameplayAbilitysystemcomponent
+    1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/fe04cd74ac788884822e5c618ef21c37c5e32bbb)
         

@@ -68,4 +68,6 @@ UE5-MOBA MULTIPLAYER ONLINE
 
 - 16, Apply Gameplay Effect to GameplayAbilitysystemcomponent
     1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/fe04cd74ac788884822e5c618ef21c37c5e32bbb)
-        
+
+- 17, Setup Server Client Call Chain
+    1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/9cf5e3483108c9308280b5ff84cf4e953d68f9a5)

@@ -13,5 +13,14 @@ UCLASS()
 class ACPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+
+public:
+	//Only Apply on Server
+	void OnPossess(APawn* NewPawn) override;
+	//Only Call On Client, also on listening server
+	void AcknowledgePossession(APawn* NewPawn) override;
+
+private:
+
+	class ACPlayerCharacter* CPlayerCharacter;
 };

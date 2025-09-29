@@ -40,7 +40,7 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 private:
-	UPROPERTY(VisibleDefaultOnly, Category = "Gameplay Ability")
+	UPROPERTY(VisibleDefaultsOnly, Category = "Gameplay Ability")
 	class UCAbilitySystemComponent* CAbilitySystemComponent;
 
 	UPROPERTY()

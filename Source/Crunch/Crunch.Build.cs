@@ -9,9 +9,9 @@ public class Crunch : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "GameplayAbilities",
-    "GameplayTags", "GameplayTasks"  });
+    "GameplayTags", "GameplayTasks", "UMG", "Slate", "SlateCore"  });
 
-        PrivateDependencyModuleNames.AddRange(new string[] { "EnhancedInput",});
+        PrivateDependencyModuleNames.AddRange(new string[] { "EnhancedInput",  });
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

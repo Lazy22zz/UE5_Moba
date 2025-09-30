@@ -75,3 +75,6 @@ UE5-MOBA MULTIPLAYER ONLINE
 - 18, Apply GameplayEffect And Replicate the Attributes.
     1. Apply Gameplaye Effect.<img width="757" height="384" alt="Screenshot 2025-09-28 190351" src="https://github.com/user-attachments/assets/b48ed116-9ee0-4ee0-b0d9-7a67dfa2e0ce" />
     2. Repliacte the Attribute in Client.[code view](https://github.com/Lazy22zz/UE5_Moba/commit/24fa45186304c5be0488dea0d312c6e6b745812a)
+
+- 19, Add the Value Gauge Widget Class
+    1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/6b7f5e889d7fad0690ec39a666b1659673e36fdd)

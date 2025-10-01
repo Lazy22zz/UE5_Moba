@@ -78,3 +78,7 @@ UE5-MOBA MULTIPLAYER ONLINE
 
 - 19, Add the Value Gauge Widget Class
     1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/6b7f5e889d7fad0690ec39a666b1659673e36fdd)
+
+- 20, Add the Value Gauge Widget Blueprint
+    1. Check the Program's `/All/Game/Widgets/Gameplays/ValueGuage/ValueGuage_WBP`.
+  

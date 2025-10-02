@@ -81,4 +81,10 @@ UE5-MOBA MULTIPLAYER ONLINE
 
 - 20, Add the Value Gauge Widget Blueprint
     1. Check the Program's `/All/Game/Widgets/Gameplays/ValueGuage/ValueGuage_WBP`.
-  
+
+- 21, Add Gameplay Widget Blueprint
+    1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/22f658dc6d7b9f4e8c5833a8171a379546da440a)
+    2. Create a new Blueprint widget named `Gameplaywidget_WBP`. check `/All/Game/Widgets/Gameplays`.
+    3. Attach this new gameplaywidget into CPlayerController_BP.
+ 
+- 22,

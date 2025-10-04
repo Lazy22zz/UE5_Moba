@@ -89,3 +89,6 @@ UE5-MOBA MULTIPLAYER ONLINE
  
 - 22, Update the Health and Mana In the Gameplay Widget
     1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/d8f2b7328e7f9007e3103ba3e396b02b441a7b6b)
+
+- 23, Add the Over Head Status Gauge
+    1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/5d1cdd6d9af2b525d183bf45353039afdeb65609)

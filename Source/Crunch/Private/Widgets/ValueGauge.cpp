@@ -24,7 +24,7 @@ void UValueGauge::SetAndBoundToGameplayAttribute(UAbilitySystemComponent* Abilit
 			SetValue(Value, MaxValue);
 		}
 
-		//Use GameplayAttributeValueChangedDelegate
+		//Use GameplayAttributeValueChangedDelegate, provide by AbilitySystemComponent
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Attribute).AddUObject(this, &UValueGauge::ValueChanged);
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(MaxAttribute).AddUObject(this, &UValueGauge::MaxValueChanged);
 	}

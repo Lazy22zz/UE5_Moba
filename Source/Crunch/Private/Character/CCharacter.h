@@ -45,4 +45,14 @@ private:
 
 	UPROPERTY()
 	class UCAttributeSet* CAttributeSet;
+
+	/*********************************************************************************************/
+	/*                                     UI                                                    */
+	/*********************************************************************************************/
+
+private:
+	UPROPERTY(VisibleDefaultsOnly, Category = "Gameplay Ability")
+	class UWidgetComponent* OverHeadWidgetComponent;
+
+	void ConfigureOverHeadWidget();
 };

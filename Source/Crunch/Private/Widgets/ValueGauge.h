@@ -18,8 +18,11 @@ class UValueGauge : public UUserWidget
 
 public:
 	virtual void NativePreConstruct() override;
+
 	// AbilitySystemComponent cannot be const, delegate will modify it. 
 	void SetAndBoundToGameplayAttribute(class UAbilitySystemComponent* AbilitySystemComponent, const FGameplayAttribute& Attribute, const FGameplayAttribute& MaxAttribute);
+	
+	// Set Character properties Value: Current Vlaue, Max Value.
 	void SetValue(float NewValue, float NewMaxValue);
 
 private:

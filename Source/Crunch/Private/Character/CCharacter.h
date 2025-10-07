@@ -20,6 +20,11 @@ public:
 	// Init base on which size:serve or client.
 	void ServerSideInit();
 	void ClientSideInit();
+	bool IsLocallyControlledbyPlayer() const;
+
+	//Only For Client, To check Is It AICharacter.
+	virtual void PossessedBy(AController* NewController) override;
+
 
 protected:
 	// Called when the game starts or when spawned

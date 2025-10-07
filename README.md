@@ -92,3 +92,6 @@ UE5-MOBA MULTIPLAYER ONLINE
 
 - 23, Add the Over Head Status Gauge
     1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/5d1cdd6d9af2b525d183bf45353039afdeb65609)
+
+- 24, Make the OverHead Widget Display Hidden for Local Player Character
+    1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/544bd52825f36c5e559d6e6ee7702844f4232219)

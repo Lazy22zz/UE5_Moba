@@ -6,6 +6,7 @@
 #include "Components/WidgetComponent.h"
 #include "GAS/CAbilitySystemComponent.h"
 #include "GAS/CAttributeSet.h"
+#include "Kismet/GameplayStatics.h"
 #include "Widgets/OverHeadStatsGauge.h"
 
 // Sets default values
@@ -20,6 +21,7 @@ ACCharacter::ACCharacter()
 
 	OverHeadWidgetComponent = CreateDefaultSubobject<UWidgetComponent>("Over Head Widget Component");
 	OverHeadWidgetComponent->SetupAttachment(GetRootComponent());
+
 }
 
 void ACCharacter::ServerSideInit()
@@ -93,6 +95,28 @@ void ACCharacter::ConfigureOverHeadWidget()
 	{
 		OverHeadStatsGauge->ConfigureWithASC(GetAbilitySystemComponent());
 		OverHeadWidgetComponent->SetHiddenInGame(false);
+		GetWorldTimerManager().ClearTimer(HeadStatGaugeVisibilityUpdateTimerHandle);
+		GetWorldTimerManager().SetTimer(HeadStatGaugeVisibilityUpdateTimerHandle, this, &ACCharacter::UpdateHeadGaugeVisibility, HeadStatGaugeVisiblittyCheckUpdateGap, true);
+	}
+}
+
+void ACCharacter::UpdateHeadGaugeVisibility()
+{
+	APawn* LocalPlayerPawn = UGameplayStatics::GetPlayerPawn(this, 0);
+	if (LocalPlayerPawn)
+	{
+		float DistSquared = FVector::DistSquared(GetActorLocation(), LocalPlayerPawn->GetActorLocation());
+
+		float NewScale = FMath::GetMappedRangeValueClamped(
+			FVector2D(0.0f, HeadStatGaugeVisibilityRangeSquared),
+			FVector2D(MaxScale, MinScale), 
+			DistSquared
+		);
+
+		FVector2D ScaleVector2D(NewScale);
+		Cast<UOverHeadStatsGauge>(OverHeadWidgetComponent->GetUserWidgetObject())->SetRenderScale(ScaleVector2D);
+
+		OverHeadWidgetComponent->SetHiddenInGame(DistSquared > HeadStatGaugeVisibilityRangeSquared);
 	}
 }
 

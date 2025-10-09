@@ -95,3 +95,7 @@ UE5-MOBA MULTIPLAYER ONLINE
 
 - 24, Make the OverHead Widget Display Hidden for Local Player Character
     1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/544bd52825f36c5e559d6e6ee7702844f4232219)
+
+- 25, Set Up the visibility control of the overhead widget based on distance scale change
+    1. Remeber to use FTimeHandle for skipping tick()
+    2. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/113e15d23fabc4cd972235a9f28a81dd84ed171b)

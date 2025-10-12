@@ -33,15 +33,15 @@ UE5-MOBA MULTIPLAYER ONLINE
 
 - 8, Add Jog Stop And Jog Lean
      1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/5ddf44e7ab32cd4cc8aaeaab303af7a15f404342)
-     2. Add new jog stop state, and new BS_JogLean.
+     2. Add a new jog stop state and a new BS_JogLean.
 
 - 9, Add Jumping Animations
      1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/8daf980f3738ffc9fabb30b265aba34e789c7694)
-     2. Add a new state machine about jumping (jump start -> jump fall)-> jemp recovery -> on ground animations.
+     2. Add a new state machine about jumping (jump start -> jump fall)-> jump recovery -> on ground animations.
 
 - 10, Add Look Offset
      1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/2d75d24f79b3ccec390462816fb4c0048731f98c)
-     2. Create the new Look Offset and Add it into BS.
+     2. Create the new Look Offset and add it to BS.
         <img width="704" height="333" alt="Screenshot 2025-09-18 201727" src="https://github.com/user-attachments/assets/d61eb977-6b82-4cc2-a898-3973a556bb03" />
         
 - 11, Add Foot Rig Control Do Foot Tracing
@@ -53,14 +53,14 @@ UE5-MOBA MULTIPLAYER ONLINE
      1. <img width="1302" height="672" alt="Screenshot 2025-09-20 175734" src="https://github.com/user-attachments/assets/dbf41731-486f-429b-8571-d5ec3c9cd90e" />
 
 - 13, Add Foot IK
-     1. fill up add foot IK and use a boolean to detect when is not on ground, the Zoffset set to 0.
+     1. Fill up the add foot IK and use a boolean to detect when it is not on the ground, the Zoffset set to 0.
      <img width="758" height="585" alt="Screenshot 2025-09-21 185657" src="https://github.com/user-attachments/assets/ccdc7a31-0995-4b3f-b7bd-5e37a8b56d88" />\
-     2. In the BS, use is on ground to detect the boolean.
+     2. In the BS, use is on the ground to detect the boolean.
      <img width="684" height="220" alt="Screenshot 2025-09-21 185649" src="https://github.com/user-attachments/assets/881469a6-ade2-4954-8cab-503664add46b" />
 
 - 14, Add Abilitysystemcomponent
      1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/a7526eb9afeed6dcda7873a3ddde3e0d28a2f71d)
-     2. remember that override for getabilitysystemcomponent().
+     2. Remember that override for getabilitysystemcomponent().
      3. Fix code issue: [code view](https://github.com/Lazy22zz/UE5_Moba/commit/d39f21f08decf354041bfc6c5b565e7105311988)
 
 - 15, Add Attribute Health, Mana
@@ -85,17 +85,23 @@ UE5-MOBA MULTIPLAYER ONLINE
 - 21, Add Gameplay Widget Blueprint
     1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/22f658dc6d7b9f4e8c5833a8171a379546da440a)
     2. Create a new Blueprint widget named `Gameplaywidget_WBP`. check `/All/Game/Widgets/Gameplays`.
-    3. Attach this new gameplaywidget into CPlayerController_BP.
+    3. Attach this new gameplay widget to CPlayerController_BP.
  
 - 22, Update the Health and Mana In the Gameplay Widget
     1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/d8f2b7328e7f9007e3103ba3e396b02b441a7b6b)
 
-- 23, Add the Over Head Status Gauge
+- 23, Add the Overhead Status Gauge
     1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/5d1cdd6d9af2b525d183bf45353039afdeb65609)
 
-- 24, Make the OverHead Widget Display Hidden for Local Player Character
+- 24, Make the Overhead Widget Display Hidden for Local Player Character
     1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/544bd52825f36c5e559d6e6ee7702844f4232219)
 
-- 25, Set Up the visibility control of the overhead widget based on distance scale change
-    1. Remeber to use FTimeHandle for skipping tick()
+- 25, Set up the visibility control of the overhead widget based on the distance scale change
+    1. Remember to use FTimeHandle for skipping tick()
     2. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/113e15d23fabc4cd972235a9f28a81dd84ed171b)
+
+- 26, Add the Basic Ability class and the Combo Ability
+    1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/be485682d3de36b9677ea834000447d2f264aabf)
+    2. In `GA_Combo`, ActivateAbility(): activate ability; CommitAbility(): condition decision(such as an ability is enabled based on mana's volume); EndAbility(): quit that ability.
+    3. In `CAbilitySystemComponent`, two arrays for the two abilities arrays; GrantAbilities() to attach the ability to the character.
+    4. In `Character/CCharacter`, use server-side to grant the ability to the  character.

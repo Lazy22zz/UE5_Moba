@@ -105,3 +105,11 @@ UE5-MOBA MULTIPLAYER ONLINE
     2. In `GA_Combo`, ActivateAbility(): activate ability; CommitAbility(): condition decision(such as an ability is enabled based on mana's volume); EndAbility(): quit that ability.
     3. In `CAbilitySystemComponent`, two arrays for the two abilities arrays; GrantAbilities() to attach the ability to the character.
     4. In `Character/CCharacter`, use server-side to grant the ability to the  character.
+
+- 27, Add the Animation Montage Play for the Combo Ability
+    1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/274986dfa906c19c4a7d75235d2e945e3fd5ddbe)
+    2. In `GA_Combo`, HasAuthorityOrPredictionKey(): use the predict key to help the server decide whether actions are allowed or declined.
+    3. In `GA_Combo`, K2_ is using blueprint Encapsulation to skip some arguments in some functions.
+    4. Create new Animation Montage `AM_Combo_Crunch`, new Gameplay Ability `GA_Combo_Crunch_BP`.
+    5. In `CPlayerCharacter_BP`, change the gameplay ability to `GA_Combo_Crunch_BP`, and change the blueprint `Try Activate by class` class to `GA_Combo_Crunch_BP`.
+    6. In `AM_Combo_Crunch`, add a new asset to it, and in `AnimBP_Crunch`, add a new slot.

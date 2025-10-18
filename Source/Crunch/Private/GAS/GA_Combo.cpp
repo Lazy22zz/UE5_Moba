@@ -2,7 +2,22 @@
 
 
 #include "GAS/GA_Combo.h"
+#include "UCAbilitySystemStatics.h"
+#include "CrunchGameplayTags.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
+
+UGA_Combo::UGA_Combo()
+{
+	/* Uisng Two different Ways to sort the GameplayTags, 
+	   If you choose blueprint to input your prefer gameplaytags name, using the first one.
+	   (Remember change the rerturn to your customize gameplaytags name!!!)
+	   If you would rather save memory and speed up the game, you can direct to use the second one.
+	*/
+
+	AbilityTags.AddTag(UCAbilitySystemStatics::GetBasicAttackAbilityTag());
+	BlockAbilitiesWithTag.AddTag(CrunchGameplayTags::Ability_Basicattack);
+}
+
 void UGA_Combo::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
 	if (!K2_CommitAbility())

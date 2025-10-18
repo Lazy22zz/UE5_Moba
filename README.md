@@ -113,3 +113,9 @@ UE5-MOBA MULTIPLAYER ONLINE
     4. Create new Animation Montage `AM_Combo_Crunch`, new Gameplay Ability `GA_Combo_Crunch_BP`.
     5. In `CPlayerCharacter_BP`, change the gameplay ability to `GA_Combo_Crunch_BP`, and change the blueprint `Try Activate by class` class to `GA_Combo_Crunch_BP`.
     6. In `AM_Combo_Crunch`, add a new asset to it, and in `AnimBP_Crunch`, add a new slot.
+
+- 28, Prevent the combo from firing by using gameplaytag
+    1. After the 27th step, when the player clicks the attack button multiple times, you can see that the player character goes into spasm.
+    2. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/b8284642dff3fab86bcc06a7cf5f4480d1b3c7d8)
+    3. We have 2 methods to solve it: delay or using gameplay tags to block.
+       

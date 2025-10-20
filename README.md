@@ -121,3 +121,11 @@ UE5-MOBA MULTIPLAYER ONLINE
        
 - 29, Play the combo Montage On the Upper Body
     1. <img width="1917" height="1027" alt="Screenshot 2025-10-19 184606" src="https://github.com/user-attachments/assets/1324e6a2-3d31-4f00-bda1-34c01a98f69e" />
+
+- 30, Use an Enum to Represent the Input ID for Given Abilities
+    0. Not similiar as ARPG game, Moba needs few button inputs.
+    1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/113d99f5e0ebf02cd38801484a33b19387dbf427)
+    2. Using a enum to hold the ID.
+    3. In `CAbilitySystemComponent`, using TMap to grab `ECAbilityInputID, TSubclassOf<UGameplayAbility`.
+    4. Create and add new input to input bundle.<img width="501" height="350" alt="Screenshot 2025-10-19 193013" src="https://github.com/user-attachments/assets/15bbfeab-2a66-48c0-9b5f-0bd6d7ef452a" />
+    5. Add the new Gameplay ability to player character. <img width="1917" height="813" alt="Screenshot 2025-10-19 193006" src="https://github.com/user-attachments/assets/132a1a91-0a38-43e5-9bbe-fd6dcbf9ee87" />

@@ -119,3 +119,5 @@ UE5-MOBA MULTIPLAYER ONLINE
     2. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/b8284642dff3fab86bcc06a7cf5f4480d1b3c7d8)
     3. We have 2 methods to solve it: delay or using gameplay tags to block.
        
+- 29, Play the combo Montage On the Upper Body
+    1. <img width="1917" height="1027" alt="Screenshot 2025-10-19 184606" src="https://github.com/user-attachments/assets/1324e6a2-3d31-4f00-bda1-34c01a98f69e" />

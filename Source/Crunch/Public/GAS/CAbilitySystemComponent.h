@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemComponent.h"
+#include "GAS/CAbilityInputID.h"
 #include "CAbilitySystemComponent.generated.h"
 
 /**
@@ -23,10 +24,10 @@ private:
 	TArray<TSubclassOf<UGameplayEffect>> InitialEffects;
 
 	UPROPERTY(EditDefaultsOnly, Category = "GamePlay Ability")
-	TArray<TSubclassOf<UGameplayAbility>> BasicAbilities; // basic character's abilities.
+	TMap<ECAbilityInputID, TSubclassOf<UGameplayAbility>> BasicAbilities; // basic character's abilities.
 
 	UPROPERTY(EditDefaultsOnly, Category = "GamePlay Ability")
-	TArray<TSubclassOf<UGameplayAbility>> Abilities; // special character's own abilities.
+	TMap<ECAbilityInputID ,TSubclassOf<UGameplayAbility>> LearnedAbilities; // special character's own abilities.
 
 
 };

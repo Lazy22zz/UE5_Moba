@@ -20,13 +20,13 @@ void UCAbilitySystemComponent::GrantAbilities()
 	if (!GetOwner() || !GetOwner()->HasAuthority())
 		return;
 
-	for (const TSubclassOf<UGameplayAbility>& AbilityClass : Abilities)
+	for (const TPair<ECAbilityInputID, TSubclassOf<UGameplayAbility>>& AbilityPair : BasicAbilities)
 	{
-		GiveAbility(FGameplayAbilitySpec(AbilityClass, 0, -1, nullptr)); // 0 means not learned yet.
+		GiveAbility(FGameplayAbilitySpec(AbilityPair.Value, 0, (int32)AbilityPair.Key, nullptr)); // 0 means not learned yet.
 	}
 
-	for (const TSubclassOf<UGameplayAbility>& AbilityClass : BasicAbilities)
+	for (const TPair<ECAbilityInputID ,TSubclassOf<UGameplayAbility>>& AbilityPair : LearnedAbilities)
 	{
-		GiveAbility(FGameplayAbilitySpec(AbilityClass, 1, -1, nullptr)); // 1 means learned it yet.
+		GiveAbility(FGameplayAbilitySpec(AbilityPair.Value, 1, (int32)AbilityPair.Key, nullptr)); // 1 means learned it yet.
 	}
 }

@@ -129,3 +129,8 @@ UE5-MOBA MULTIPLAYER ONLINE
     3. In `CAbilitySystemComponent`, using TMap to grab `ECAbilityInputID, TSubclassOf<UGameplayAbility`.
     4. Create and add new input to input bundle.<img width="501" height="350" alt="Screenshot 2025-10-19 193013" src="https://github.com/user-attachments/assets/15bbfeab-2a66-48c0-9b5f-0bd6d7ef452a" />
     5. Add the new Gameplay ability to player character. <img width="1917" height="813" alt="Screenshot 2025-10-19 193006" src="https://github.com/user-attachments/assets/132a1a91-0a38-43e5-9bbe-fd6dcbf9ee87" />
+
+- 31, Add Input Action Binding for Abilities in the Player Character Class
+    1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/ae12b16a855915a64e59cdfe7be3dc15bc51af9e)
+    2. Using the TMap, TPair to bundle the InputAction and ECAbilityID.
+    3. <img width="715" height="86" alt="Screenshot 2025-10-20 203338" src="https://github.com/user-attachments/assets/c2ebeee5-46a4-4d39-9251-91d2f32f59bc" />

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Character/CCharacter.h"
+#include "GAS/CAbilityInputID.h"
 #include "InputActionValue.h"
 #include "CPlayerCharacter.generated.h"
 
@@ -27,6 +28,14 @@ private:
 	UPROPERTY(VisibleDefaultsOnly, Category = "View")
 	class UCameraComponent* ViewCam;
 
+	FVector GetLookRightDir() const;
+	FVector GetLookfwdDir() const;
+	FVector GetMovefwdDir() const;
+
+	/*********************************************************************/
+	/*                         Input                                     */
+	/*********************************************************************/
+private:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputMappingContext* GameplayInputMappingContext;
 
@@ -39,10 +48,11 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* MoveInputAction;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TMap<ECAbilityInputID, class UInputAction*> GameplayAbilitiesMappingActions;
+
 	void HandleLookInputAction(const FInputActionValue& InputAction);
 	void HandleMoveInputAction(const FInputActionValue& InputAction);
+	void HandleAbilityInput(const FInputActionValue& InputActionValue, ECAbilityInputID AbilityInputID);
 
-	FVector GetLookRightDir() const;
-	FVector GetLookfwdDir() const;
-	FVector GetMovefwdDir() const;
 };

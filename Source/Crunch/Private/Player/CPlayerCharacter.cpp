@@ -2,6 +2,7 @@
 
 
 #include "Player/CPlayerCharacter.h"
+#include "AbilitySystemComponent.h"
 #include "Camera/CameraComponent.h"
 #include "EnhancedInputcomponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -50,8 +51,12 @@ void ACPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		EnhancedInputComp->BindAction(JumpInputAction, ETriggerEvent::Triggered, this, &ACPlayerCharacter::Jump);
 		EnhancedInputComp->BindAction(LookInputAction, ETriggerEvent::Triggered, this, &ACPlayerCharacter::HandleLookInputAction);
 		EnhancedInputComp->BindAction(MoveInputAction, ETriggerEvent::Triggered, this, &ACPlayerCharacter::HandleMoveInputAction);
-	}
 
+		for (const TPair<ECAbilityInputID, UInputAction*>&InputActionPair : GameplayAbilitiesMappingActions)
+		{
+			EnhancedInputComp->BindAction(InputActionPair.Value, ETriggerEvent::Triggered, this, &ACPlayerCharacter::HandleAbilityInput, InputActionPair.Key);
+		}
+	}
 }
 
 void ACPlayerCharacter::HandleLookInputAction(const FInputActionValue& InputAction)
@@ -69,6 +74,21 @@ void ACPlayerCharacter::HandleMoveInputAction(const FInputActionValue& InputActi
 	InputValue.Normalize();
 
 	AddMovementInput(GetMovefwdDir() * InputValue.Y + GetLookRightDir() * InputValue.X);
+}
+
+// Enable the pressed, hold, release abilities!!
+void ACPlayerCharacter::HandleAbilityInput(const FInputActionValue& InputActionValue, ECAbilityInputID AbilityInputID)
+{
+	bool bPressed = InputActionValue.Get<bool>();
+
+	if (bPressed)
+	{
+		GetAbilitySystemComponent()->AbilityLocalInputPressed((int32)AbilityInputID);
+	}
+	else
+	{
+		GetAbilitySystemComponent()->AbilityLocalInputReleased((int32)AbilityInputID);
+	}
 }
 
 FVector ACPlayerCharacter::GetLookRightDir() const

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CGameplayAbility.generated.h"
+#include "CAbilityInputID.generated.h" 
 
 UENUM(BlueprintType)
 enum class ECAbilityInputID : uint8

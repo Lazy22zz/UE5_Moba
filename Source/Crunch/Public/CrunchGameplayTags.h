@@ -7,5 +7,9 @@
 
 namespace CrunchGameplayTags
 {
+	// Ability Combo
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Basicattack);
+
+	// Ability Event
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Change_Combo002);
 }

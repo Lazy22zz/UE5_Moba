@@ -119,18 +119,23 @@ UE5-MOBA MULTIPLAYER ONLINE
     2. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/b8284642dff3fab86bcc06a7cf5f4480d1b3c7d8)
     3. We have 2 methods to solve it: delay or using gameplay tags to block.
        
-- 29, Play the combo Montage On the Upper Body
+- 29, Play the combo Montage on the Upper Body
     1. <img width="1917" height="1027" alt="Screenshot 2025-10-19 184606" src="https://github.com/user-attachments/assets/1324e6a2-3d31-4f00-bda1-34c01a98f69e" />
 
 - 30, Use an Enum to Represent the Input ID for Given Abilities
-    0. Not similiar as ARPG game, Moba needs few button inputs.
+    0. Not similar to an ARPG game, Moba needs few button inputs.
     1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/113d99f5e0ebf02cd38801484a33b19387dbf427)
-    2. Using a enum to hold the ID.
+    2. Using an enum to hold the ID.
     3. In `CAbilitySystemComponent`, using TMap to grab `ECAbilityInputID, TSubclassOf<UGameplayAbility`.
-    4. Create and add new input to input bundle.<img width="501" height="350" alt="Screenshot 2025-10-19 193013" src="https://github.com/user-attachments/assets/15bbfeab-2a66-48c0-9b5f-0bd6d7ef452a" />
-    5. Add the new Gameplay ability to player character. <img width="1917" height="813" alt="Screenshot 2025-10-19 193006" src="https://github.com/user-attachments/assets/132a1a91-0a38-43e5-9bbe-fd6dcbf9ee87" />
+    4. Create and add a new input to the input bundle.<img width="501" height="350" alt="Screenshot 2025-10-19 193013" src="https://github.com/user-attachments/assets/15bbfeab-2a66-48c0-9b5f-0bd6d7ef452a" />
+    5. Add the new Gameplay ability to the player character. <img width="1917" height="813" alt="Screenshot 2025-10-19 193006" src="https://github.com/user-attachments/assets/132a1a91-0a38-43e5-9bbe-fd6dcbf9ee87" />
 
 - 31, Add Input Action Binding for Abilities in the Player Character Class
     1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/ae12b16a855915a64e59cdfe7be3dc15bc51af9e)
     2. Using the TMap, TPair to bundle the InputAction and ECAbilityID.
     3. <img width="715" height="86" alt="Screenshot 2025-10-20 203338" src="https://github.com/user-attachments/assets/c2ebeee5-46a4-4d39-9251-91d2f32f59bc" />
+
+- 32, Create the Send Gameplay Event Animation Notify
+    1. [code view](https://github.com/Lazy22zz/UE5_Moba/commit/7ae67b0f96444d077186f1c051fdee9cea3248ae)
+    2. Override `Notify()`, and send `SendGameplayEventToActor`.
+    3. Little trick to change the AN_Notify name by using `GetNotifyName_Implementation()`.

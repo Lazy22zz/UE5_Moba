@@ -11,5 +11,10 @@ namespace CrunchGameplayTags
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Basicattack);
 
 	// Ability Event
-	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Change_Combo002);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Combo_Change_Combo01);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Combo_Change_Combo02);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Combo_Change_Combo03);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Combo_Change_Combo04);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Combo_Change_Combo05);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Combo_Change_End);
 }

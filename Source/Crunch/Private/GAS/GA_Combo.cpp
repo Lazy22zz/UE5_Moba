@@ -17,22 +17,24 @@ UGA_Combo::UGA_Combo()
 	   If you would rather save memory and speed up the game, you can direct to use the second one.
 	*/
 
-	AbilityTags.AddTag(UCAbilitySystemStatics::GetBasicAttackAbilityTag());
+	AbilityTags.AddTag(UCAbilitySystemStatics::GetBasicAttackAbilityTag()); // or AbilityTags.AddTag(CrunchGameplayTags::Ability_Basicattack);
 	BlockAbilitiesWithTag.AddTag(CrunchGameplayTags::Ability_Basicattack);
 }
 
 void UGA_Combo::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
+	// Submit the ability to complete the "final activation confirmation" of the ability
 	if (!K2_CommitAbility())
 	{
 		K2_EndAbility();
 		return;
 	}
 
-	if (HasAuthorityOrPredictionKey(ActorInfo, &ActivationInfo)) //serve predict actor actions
+	if (HasAuthorityOrPredictionKey(ActorInfo, &ActivationInfo)) //server predict actor actions
 	{
 		UAbilityTask_PlayMontageAndWait* PlayComboMontageTask = UAbilityTask_PlayMontageAndWait::CreatePlayMontageAndWaitProxy(this, NAME_None, ComboMontage);
 
+		//// 4 types of animation abnormal situations, all bound to the "End Skill" callback
 		PlayComboMontageTask->OnBlendOut.AddDynamic(this, &UGA_Combo::K2_EndAbility);
 		PlayComboMontageTask->OnCancelled.AddDynamic(this, &UGA_Combo::K2_EndAbility);
 		PlayComboMontageTask->OnCompleted.AddDynamic(this, &UGA_Combo::K2_EndAbility);
@@ -60,7 +62,7 @@ FGameplayTag UGA_Combo::GetComboChangedEndTag()
 void UGA_Combo::SetupInputComboPress()
 {
 	UAbilityTask_WaitInputPress* WaitInputPress = UAbilityTask_WaitInputPress::WaitInputPress(this);
-	WaitInputPress->OnPress.AddDynamic(this, &UGA_Combo::HandleInputPress);
+	WaitInputPress->OnPress.AddDynamic(this, &UGA_Combo::HandleInputPress); //GAS asynchronous task
 	WaitInputPress->ReadyForActivation();
 }
 
@@ -79,9 +81,11 @@ void UGA_Combo::TryCommitCombo()
 	if (!OwnerAnimInstnce)
 		return;
 
+	// The core API for switching combo animations
 	OwnerAnimInstnce->Montage_SetNextSection(OwnerAnimInstnce->Montage_GetCurrentSection(ComboMontage), NextComboName, ComboMontage);
 }
 
+// Use "GameplayTag" to pass "the segment name of the next combo"
 void UGA_Combo::ComboChangeEventReceived(FGameplayEventData Data)
 {
 	FGameplayTag EventTag = Data.EventTag;

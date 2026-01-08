@@ -9,6 +9,7 @@ namespace CrunchGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Basicattack, "Ability.Basicattack");
 
 	// Ability Event
+	UE_DEFINE_GAMEPLAY_TAG(Ability_Combo_Damage, "Ability.Combo.Damage");
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Combo_Change_Combo01, "Ability.Combo.Change.Combo01");
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Combo_Change_Combo02, "Ability.Combo.Change.Combo02");
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Combo_Change_Combo03, "Ability.Combo.Change.Combo03");

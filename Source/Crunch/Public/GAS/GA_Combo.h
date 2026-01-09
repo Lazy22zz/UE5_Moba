@@ -19,6 +19,8 @@ public:
 	
 	static FGameplayTag GetComboChangedEventTag();
 	static FGameplayTag GetComboChangedEndTag();
+	static FGameplayTag GetComboEventTargetTag();
+
 private:
 	void SetupInputComboPress();
 
@@ -32,6 +34,9 @@ private:
 
 	UFUNCTION()
 	void ComboChangeEventReceived(FGameplayEventData GameplayData);
+
+	UFUNCTION()
+	void DoDamage(FGameplayEventData GameplayData);
 
 	FName NextComboName;
 };

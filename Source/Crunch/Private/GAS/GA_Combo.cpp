@@ -7,6 +7,7 @@
 #include "Abilities/Tasks/AbilityTask_WaitGameplayEvent.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Abilities/Tasks/AbilityTask_WaitInputPress.h"
+#include "AbilitySystemBlueprintLibrary.h"
 #include "GameplayTagsManager.h"
 
 // 给普攻技能加「身份标识」和「互斥约束」
@@ -101,6 +102,30 @@ void UGA_Combo::TryCommitCombo()
 	OwnerAnimInstnce->Montage_SetNextSection(OwnerAnimInstnce->Montage_GetCurrentSection(ComboMontage), NextComboName, ComboMontage);
 }
 
+TSubclassOf<UGameplayEffect> UGA_Combo::GetDamageEffectforcurrentCombo() const
+{
+	// 1. 获取技能拥有者的动画实例（比如玩家角色/AI的UAnimInstance）
+	UAnimInstance* OwnerAnimInstance = GetOwnerAnimInstance();
+	if (OwnerAnimInstance) // 动画实例有效，才继续匹配
+	{
+		// 2. 获取【连击蒙太奇ComboMontage】当前正在播放的动画分段名称（FName）
+		// 比如播放到Combo_1，就返回FName("Combo_1")，播放到重击就返回FName("Heavy")
+		FName CurrentSectionName = OwnerAnimInstance->Montage_GetCurrentSection(ComboMontage);
+
+		// 3. TMap的核心API：Find(Key) → 根据Key查找对应的Value，返回【常量指针】
+		// 为什么返回指针？因为Find可能查不到，查不到时返回 nullptr，查到则返回指向对应Value的指针
+		const TSubclassOf<UGameplayEffect>* FoundEffectPtr = DamageEffectMap.Find(CurrentSectionName);
+
+		if (FoundEffectPtr) // 查到了！指针非空
+		{
+			// 4. 解引用指针，返回查到的「对应连击段的伤害效果类」
+			return *FoundEffectPtr;
+		}
+	}
+	// 5. 兜底逻辑：任何失败情况（动画实例无效/查不到对应伤害效果），返回默认伤害效果
+	return DefaultDamageEffectMap;
+}
+
 // Use "GameplayTag" to pass "the segment name of the next combo"
 void UGA_Combo::ComboChangeEventReceived(FGameplayEventData Data)
 {
@@ -120,8 +145,29 @@ void UGA_Combo::ComboChangeEventReceived(FGameplayEventData Data)
 	UE_LOG(LogTemp, Warning, TEXT("Next combo is now : %s"), *NextComboName.ToString());
 }
 
-// 伤害结算核心逻辑
 void UGA_Combo::DoDamage(FGameplayEventData GameplayData)
 {
+	// 1. 核心API：从事件数据的「目标数据」中，获取所有命中的目标（FHitResult数组）
+	// 参数说明：
+	// - GameplayData.TargetData：GAS的目标数据，包含本次连击的碰撞检测结果
+	// - 30.f：碰撞检测的「半径/容差」，允许轻微的碰撞偏移，避免漏判
+	// - true,true：是否忽略自己/是否忽略友好单位，GAS标准写法，避免打自己/队友
 	TArray<FHitResult> HitResults = GetHitResultFromSweepLocationTargetData(GameplayData.TargetData, 30.f, true, true);
+
+	// 2. 遍历所有命中的目标，逐个施加伤害效果（多段连击可以同时打多个敌人）
+	for (const FHitResult HitResult : HitResults)
+	{
+		// 3. 调用上面的查询函数，拿到「当前连击段对应的伤害效果类」
+		TSubclassOf<UGameplayEffect> GameplayEffect = GetDamageEffectforcurrentCombo();
+
+		// 4. 生成「伤害效果的蓝图句柄」（GAS核心步骤！必须做）
+		// MakeOutgoingGameplayEffectSpec：把「伤害效果类」实例化为「可执行的效果蓝图Spec」
+		// 第二个参数：获取当前技能的等级，伤害数值会根据技能等级缩放（比如2级普攻伤害更高）
+		FGameplayEffectSpecHandle EffectSpecHandle = MakeOutgoingGameplayEffectSpec(GameplayEffect, GetAbilityLevel(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo()));
+
+		// 5. 最终核心：把伤害效果蓝图，施加给命中的目标 → 完成伤害结算！
+		// ApplyGameplayEffectSpecToTarget：GAS的伤害施加API，把Spec句柄应用到目标身上
+		// UAbilitySystemBlueprintLibrary::AbilityTargetDataFromActor：把命中的Actor转为GAS能识别的目标数据
+		ApplyGameplayEffectSpecToTarget(GetCurrentAbilitySpecHandle(), CurrentActorInfo, CurrentActivationInfo, EffectSpecHandle, UAbilitySystemBlueprintLibrary::AbilityTargetDataFromActor(HitResult.GetActor()));
+	}
 }

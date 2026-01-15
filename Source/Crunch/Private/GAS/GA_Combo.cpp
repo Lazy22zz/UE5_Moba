@@ -147,25 +147,31 @@ void UGA_Combo::ComboChangeEventReceived(FGameplayEventData Data)
 
 void UGA_Combo::DoDamage(FGameplayEventData GameplayData)
 {
-	// 1. 核心API：从事件数据的「目标数据」中，获取所有命中的目标（FHitResult数组）
+	// 核心API：从事件数据的「目标数据」中，获取所有命中的目标（FHitResult数组）
 	// 参数说明：
 	// - GameplayData.TargetData：GAS的目标数据，包含本次连击的碰撞检测结果
-	// - 30.f：碰撞检测的「半径/容差」，允许轻微的碰撞偏移，避免漏判
 	// - true,true：是否忽略自己/是否忽略友好单位，GAS标准写法，避免打自己/队友
-	TArray<FHitResult> HitResults = GetHitResultFromSweepLocationTargetData(GameplayData.TargetData, 30.f, true, true);
+	TArray<FHitResult> HitResults = GetHitResultFromSweepLocationTargetData(GameplayData.TargetData, HitTargetSphereRadius, false, true);
 
-	// 2. 遍历所有命中的目标，逐个施加伤害效果（多段连击可以同时打多个敌人）
-	for (const FHitResult HitResult : HitResults)
+	// 遍历所有命中的目标，逐个施加伤害效果（多段连击可以同时打多个敌人）
+	for (const FHitResult& HitResult : HitResults)
 	{
-		// 3. 调用上面的查询函数，拿到「当前连击段对应的伤害效果类」
+		// 调用上面的查询函数，拿到「当前连击段对应的伤害效果类」
 		TSubclassOf<UGameplayEffect> GameplayEffect = GetDamageEffectforcurrentCombo();
 
-		// 4. 生成「伤害效果的蓝图句柄」（GAS核心步骤！必须做）
+		// FGameplayEffectSpecHandle： 效果「本体」-> 伤害数值、效果规则、等级、标签
 		// MakeOutgoingGameplayEffectSpec：把「伤害效果类」实例化为「可执行的效果蓝图Spec」
 		// 第二个参数：获取当前技能的等级，伤害数值会根据技能等级缩放（比如2级普攻伤害更高）
 		FGameplayEffectSpecHandle EffectSpecHandle = MakeOutgoingGameplayEffectSpec(GameplayEffect, GetAbilityLevel(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo()));
 
-		// 5. 最终核心：把伤害效果蓝图，施加给命中的目标 → 完成伤害结算！
+		// FGameplayEffectContextHandle: 效果「快递盒」-> 命中位置、HitResult、施法者、受击者、自定义信息和决定效果的附加信息是什么、蓝图能拿到什么数据
+		FGameplayEffectContextHandle GameplayEffectContextHandle = MakeEffectContext(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo());
+		GameplayEffectContextHandle.AddHitResult(HitResult);
+
+		// 让效果带着附加信息走
+		EffectSpecHandle.Data->SetContext(GameplayEffectContextHandle);
+
+		//  最终核心：把伤害效果蓝图，施加给命中的目标 → 完成伤害结算！
 		// ApplyGameplayEffectSpecToTarget：GAS的伤害施加API，把Spec句柄应用到目标身上
 		// UAbilitySystemBlueprintLibrary::AbilityTargetDataFromActor：把命中的Actor转为GAS能识别的目标数据
 		ApplyGameplayEffectSpecToTarget(GetCurrentAbilitySpecHandle(), CurrentActorInfo, CurrentActivationInfo, EffectSpecHandle, UAbilitySystemBlueprintLibrary::AbilityTargetDataFromActor(HitResult.GetActor()));

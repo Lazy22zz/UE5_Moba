@@ -29,6 +29,9 @@ private:
 
 	void TryCommitCombo();
 
+	UPROPERTY(EditDefaultsOnly, Category = "Targetting")
+	float HitTargetSphereRadius = 30.f;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay Effect")
 	TSubclassOf<UGameplayEffect> DefaultDamageEffectMap;
 

@@ -16,4 +16,5 @@ namespace CrunchGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Combo_Change_Combo04, "Ability.Combo.Change.Combo04");
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Combo_Change_Combo05, "Ability.Combo.Change.Combo05");
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Combo_Change_End, "Ability.Combo.Change.End");
+	UE_DEFINE_GAMEPLAY_TAG(Ability_HitReaction, "Ability.HitReaction");
 }

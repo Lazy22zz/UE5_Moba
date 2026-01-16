@@ -18,6 +18,6 @@ namespace CrunchGameplayTags
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Combo_Change_Combo04);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Combo_Change_Combo05);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Combo_Change_End);
-
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_HitReaction);
 
 }

@@ -1,11 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+//负责 游戏的所有业务逻辑 + 表现逻辑：角色移动、动画播放、特效音效、输入响应、死亡动作、复活表现、碰撞检测、相机跟随。
+//它是游戏的 “肉身”，是玩家能看到、能操作的实体，不管 GAS 的底层逻辑。
 #pragma once
 
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
+#include "GameplayTagContainer.h" 
 #include "CCharacter.generated.h"
 
 UCLASS()
@@ -45,6 +48,9 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 private:
+	void BindGASChangedDelegate();
+	void DeathTagUpdated(const FGameplayTag Tag, int32 NewCount); 
+
 	UPROPERTY(VisibleDefaultsOnly, Category = "Gameplay Ability")
 	class UCAbilitySystemComponent* CAbilitySystemComponent;
 
@@ -76,4 +82,11 @@ private:
 	FTimerHandle HeadStatGaugeVisibilityUpdateTimerHandle;
 
 	void UpdateHeadGaugeVisibility();
+
+	/*********************************************************************************************/
+	/*                                  Death                                                    */
+	/*********************************************************************************************/
+private:
+	void StartDeathSequence();
+	void Respawn();
 };

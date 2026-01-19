@@ -20,4 +20,6 @@ namespace CrunchGameplayTags
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Combo_Change_End);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_HitReaction);
 
+	// Status
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Status_Dead);
 }

@@ -7,7 +7,7 @@
 
 // ==============================================================
 // 【核心函数1】PreAttributeChange 前置属性修改拦截器
-// ★★★ 核心作用（你复习重点）★★★
+// ★★★ 核心作用★★★
 // 1. 拦截范围：只管控【所有非GameplayEffect(GE)驱动的属性修改】
 //    - 蓝图里手动调用SetHealth/SetMana修改血蓝
 //    - C++代码里直接赋值：如 SetHealth(GetHealth()-5)
@@ -34,7 +34,7 @@ void UCAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, flo
 
 // ==============================================================
 // 【核心函数2】PostGameplayEffectExecute 后置GE执行完成回调
-// ★★★ 核心作用（你复习重点，解决你碰撞扣血负数的关键）★★★
+// ★★★ 核心作用★★★
 // 1. 拦截范围：管控【所有通过GameplayEffect(GE)驱动的属性修改】，无任何例外！
 //    - GE的普通静态Modifier（中毒自动扣血、加攻击力buff、护盾等）
 //    - GE的Execution执行计算（你的【碰撞体积触碰扣血】就是这个，100%触发此函数）

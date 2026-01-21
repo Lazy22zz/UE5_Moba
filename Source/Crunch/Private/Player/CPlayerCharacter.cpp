@@ -91,6 +91,35 @@ void ACPlayerCharacter::HandleAbilityInput(const FInputActionValue& InputActionV
 	}
 }
 
+
+// 玩家角色的死亡回调（重写父类的OnDeath）
+void ACPlayerCharacter::OnDeath()
+{
+	// 获取当前控制该玩家角色的PlayerController（玩家控制器）
+	APlayerController* PlayerController = GetController<APlayerController>();
+
+	// 检查PlayerController是否有效（避免空指针）
+	if (PlayerController)
+	{
+		// 禁用玩家输入（死亡后玩家无法再操作角色）
+		DisableInput(PlayerController);
+	}
+}
+
+// 玩家角色的重生回调（重写父类的OnRespawn）
+void ACPlayerCharacter::OnRespawn()
+{
+	// 获取当前控制该玩家角色的PlayerController（玩家控制器）
+	APlayerController* PlayerController = GetController<APlayerController>();
+
+	// 检查PlayerController是否有效（避免空指针）
+	if (PlayerController)
+	{
+		// 恢复玩家输入（重生后玩家可重新操作角色）
+		EnableInput(PlayerController);
+	}
+}
+
 FVector ACPlayerCharacter::GetLookRightDir() const
 {
 	return ViewCam->GetRightVector();

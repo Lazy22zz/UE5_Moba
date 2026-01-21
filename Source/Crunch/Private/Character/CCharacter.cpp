@@ -3,6 +3,8 @@
 #include "Character/CCharacter.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/WidgetComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GAS/CAbilitySystemComponent.h"
 #include "GAS/CAttributeSet.h"
 #include "CrunchGameplayTags.h"
@@ -156,14 +158,77 @@ void ACCharacter::UpdateHeadGaugeVisibility()
 	}
 }
 
-// 死亡流程（仅日志，需补充具体逻辑：播放动画、禁用控制等）
-void ACCharacter::StartDeathSequence()
+// 设置状态血条（状态栏）的启用/禁用状态
+// 参数 bIsEnable: true表示启用显示，false表示禁用隐藏
+void ACCharacter::SetStatusGaugeEnabled(bool bIsEnable)
 {
-	UE_LOG(LogTemp, Warning, TEXT("DEAD"));
+	// 清除血条可见性更新的定时器（防止定时器重复触发导致状态异常）
+	GetWorldTimerManager().ClearTimer(HeadStatGaugeVisibilityUpdateTimerHandle);
+
+	// 如果启用状态栏
+	if (bIsEnable)
+	{
+		// 配置头顶的UI组件（比如初始化血条、设置位置等）
+		ConfigureOverHeadWidget();
+	}
+	// 如果禁用状态栏
+	else
+	{
+		// 将头顶UI组件在游戏中隐藏
+		OverHeadWidgetComponent->SetHiddenInGame(true);
+	}
 }
 
-// 重生逻辑（仅日志，需补充具体逻辑：重置属性、刷新位置等）
+// 播放角色死亡动画
+void ACCharacter::PlayDeathAnimation()
+{
+	// 检查死亡动画蒙太奇是否有效（避免空指针访问）
+	if (DeathMontage)
+	{
+		// 播放死亡动画蒙太奇
+		PlayAnimMontage(DeathMontage);
+	}
+}
+
+// 角色死亡流程的核心函数
+// 注：当前仅实现基础逻辑，可扩展：播放死亡音效、触发死亡特效、通知GameMode等
+void ACCharacter::StartDeathSequence()
+{
+	// 触发死亡回调（供子类重写，实现个性化死亡逻辑）
+	OnDeath();
+
+	// 播放死亡动画
+	PlayDeathAnimation();
+
+	// 禁用头顶的状态血条（死亡后不再显示）
+	SetStatusGaugeEnabled(false);
+
+	// 停止角色移动（将移动模式设为无，角色不再受物理和输入控制）
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+
+	// 关闭胶囊体碰撞（避免死亡后角色被碰撞、阻挡）
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
+// 角色重生逻辑
+// 注：当前仅打印日志，需补充：重置血量/属性、刷新角色位置、恢复碰撞/移动等
 void ACCharacter::Respawn()
 {
+	// 打印重生日志（调试用，发布时可移除）
 	UE_LOG(LogTemp, Warning, TEXT("Respawn"));
+
+	// 触发重生回调（供子类重写，实现个性化重生逻辑）
+	OnRespawn();
+}
+
+// 死亡回调函数（虚函数，供子类重写）
+// 基类空实现，由子类（如玩家角色）自定义死亡逻辑
+void ACCharacter::OnDeath()
+{
+}
+
+// 重生回调函数（虚函数，供子类重写）
+// 基类空实现，由子类（如玩家角色）自定义重生逻辑
+void ACCharacter::OnRespawn()
+{
 }

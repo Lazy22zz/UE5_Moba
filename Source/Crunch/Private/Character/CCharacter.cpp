@@ -214,11 +214,26 @@ void ACCharacter::StartDeathSequence()
 // 注：当前仅打印日志，需补充：重置血量/属性、刷新角色位置、恢复碰撞/移动等
 void ACCharacter::Respawn()
 {
-	// 打印重生日志（调试用，发布时可移除）
-	UE_LOG(LogTemp, Warning, TEXT("Respawn"));
-
 	// 触发重生回调（供子类重写，实现个性化重生逻辑）
 	OnRespawn();
+
+	// 开启胶囊体碰撞
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
+	// 允许角色移动
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+
+	// 启用头顶的状态血条
+	SetStatusGaugeEnabled(true);
+
+	// 终止所有正在播放的动画蒙太奇
+	GetMesh()->GetAnimInstance()->StopAllMontages(0.f);
+
+	// 启用初始状态的GE
+	if (CAbilitySystemComponent)
+	{
+		CAbilitySystemComponent->ApplyFullStatEffect();
+	}
 }
 
 // 死亡回调函数（虚函数，供子类重写）

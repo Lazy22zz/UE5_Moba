@@ -20,8 +20,7 @@ void UCAbilitySystemComponent::ApplyInitialEffects()
 	// 遍历初始效果列表，逐个应用到自身
 	for (const TSubclassOf<UGameplayEffect>& Effects: InitialEffects)
 	{
-		FGameplayEffectSpecHandle InitialEffectsSpecHandle = MakeOutgoingSpec(Effects, 1, MakeEffectContext());
-		ApplyGameplayEffectSpecToSelf(*InitialEffectsSpecHandle.Data.Get());
+		AuthApplyGameplayEffect(Effects);
 	}
 }
 
@@ -44,6 +43,24 @@ void UCAbilitySystemComponent::GrantAbilities()
 	}
 }
 
+// 应用满属性效果（内部调用授权接口，仅服务端生效）
+void UCAbilitySystemComponent::ApplyFullStatEffect()
+{
+	AuthApplyGameplayEffect(FullStatEffect);
+}
+
+// 服务端授权应用GameplayEffect（核心GE应用接口，含权限校验+效果实例化+自我应用）
+// GameplayEffect：要应用的效果类；Level：效果等级（默认未指定时按效果默认等级）
+void UCAbilitySystemComponent::AuthApplyGameplayEffect(TSubclassOf<UGameplayEffect> GameplayEffect, int Level)
+{
+	if (GetOwner() && GetOwner()->HasAuthority())
+	{
+		FGameplayEffectSpecHandle InitialEffectsSpecHandle = MakeOutgoingSpec(GameplayEffect, Level, MakeEffectContext());
+		ApplyGameplayEffectSpecToSelf(*InitialEffectsSpecHandle.Data.Get());
+	}
+
+}
+
 // 生命值更新回调函数
 void UCAbilitySystemComponent::HealthUpdated(const FOnAttributeChangeData& Data)
 {
@@ -52,7 +69,6 @@ void UCAbilitySystemComponent::HealthUpdated(const FOnAttributeChangeData& Data)
 	// 生命值≤0、服务端、死亡效果有效时，应用死亡效果
 	if (Data.OldValue > 0.f && Data.NewValue <= 0.f && GetOwner()->HasAuthority() && DeathEffect)
 	{
-		FGameplayEffectSpecHandle InitialEffectsSpecHandle = MakeOutgoingSpec(DeathEffect, 1, MakeEffectContext());
-		ApplyGameplayEffectSpecToSelf(*InitialEffectsSpecHandle.Data.Get());
+		AuthApplyGameplayEffect(DeathEffect);
 	}
 }

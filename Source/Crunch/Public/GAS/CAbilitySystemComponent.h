@@ -23,9 +23,15 @@ public:
 
 	void ApplyInitialEffects();
 	void GrantAbilities();
+	void ApplyFullStatEffect();
 
 private:
+	
+	void AuthApplyGameplayEffect(TSubclassOf<UGameplayEffect> GameplayEffect, int Level = 1);
 	void HealthUpdated(const FOnAttributeChangeData& Data);
+
+	UPROPERTY(EditDefaultsOnly, Category = "GamePlay Effect")
+	TSubclassOf<UGameplayEffect> FullStatEffect;
 
 	UPROPERTY(EditDefaultsOnly, Category = "GamePlay Effect")
 	TSubclassOf<UGameplayEffect> DeathEffect;

@@ -118,6 +118,7 @@ void ACPlayerCharacter::OnRespawn()
 		// 恢复玩家输入（重生后玩家可重新操作角色）
 		EnableInput(PlayerController);
 	}
+
 }
 
 FVector ACPlayerCharacter::GetLookRightDir() const

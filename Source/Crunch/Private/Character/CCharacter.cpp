@@ -70,6 +70,9 @@ void ACCharacter::BeginPlay()
 	Super::BeginPlay();
 	// 配置头顶Widget（显示/隐藏、绑定数据等）
 	ConfigureOverHeadWidget();
+
+	// 记录角色Mesh的初始相对变换（用于重生时恢复位置/旋转）
+	MeshRelativeTransform = GetMesh()->GetRelativeTransform();
 }
 
 // 每帧Tick（可根据需求关闭）
@@ -179,14 +182,50 @@ void ACCharacter::SetStatusGaugeEnabled(bool bIsEnable)
 	}
 }
 
+// 死亡动画蒙太奇播放完成后的回调函数
+void ACCharacter::DeathMontageFinshed()
+{
+	// 启用布娃娃物理效果（角色死亡后物理接管）
+	SetRagdollEnabled(true);
+}
+
+// 启用/禁用角色布娃娃(Ragdoll)物理效果
+void ACCharacter::SetRagdollEnabled(bool bIsEnabled)
+{
+	if (bIsEnabled)
+	{
+		// 将Mesh从根组件分离（解除动画控制），保留世界空间变换
+		GetMesh()->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+		// 开启Mesh物理模拟（布娃娃核心：让物理引擎控制角色）
+		GetMesh()->SetSimulatePhysics(true);
+		// 设置碰撞为仅物理碰撞（响应物理效果，不响应其他碰撞检测）
+		GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	}
+	else
+	{
+		// 关闭Mesh物理模拟（恢复动画控制）
+		GetMesh()->SetSimulatePhysics(false);
+		// 关闭Mesh碰撞（避免重生后碰撞异常）
+		GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		// 将Mesh重新附加到根组件，保留相对变换
+		GetMesh()->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+		// 恢复Mesh到角色初始的相对位置/旋转（重生后回到正常姿态）
+		GetMesh()->SetRelativeTransform(MeshRelativeTransform);
+	}
+}
+
 // 播放角色死亡动画
 void ACCharacter::PlayDeathAnimation()
 {
 	// 检查死亡动画蒙太奇是否有效（避免空指针访问）
 	if (DeathMontage)
 	{
-		// 播放死亡动画蒙太奇
-		PlayAnimMontage(DeathMontage);
+		// 播放死亡动画蒙太奇：由GE决定。
+		float MontageDuration = PlayAnimMontage(DeathMontage);
+		// 设置定时器：动画播放完成后（加偏移时间）触发布娃娃效果
+		// DeathMontageTimeShift：动画与物理衔接的时间偏移（避免衔接生硬）
+		GetWorldTimerManager().SetTimer(DeathMontageTimerHandle, this, &ACCharacter::DeathMontageFinshed, MontageDuration + DeathMontageTimeShift);
+
 	}
 }
 
@@ -199,6 +238,8 @@ void ACCharacter::StartDeathSequence()
 
 	// 播放死亡动画
 	PlayDeathAnimation();
+
+	SetRagdollEnabled(false);
 
 	// 禁用头顶的状态血条（死亡后不再显示）
 	SetStatusGaugeEnabled(false);
@@ -216,6 +257,8 @@ void ACCharacter::Respawn()
 {
 	// 触发重生回调（供子类重写，实现个性化重生逻辑）
 	OnRespawn();
+
+	SetRagdollEnabled(false);
 
 	// 开启胶囊体碰撞
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);

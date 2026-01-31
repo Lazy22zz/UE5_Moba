@@ -9,10 +9,11 @@
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
 #include "GameplayTagContainer.h" 
+#include "GenericTeamAgentInterface.h"
 #include "CCharacter.generated.h"
 
 UCLASS()
-class ACCharacter : public ACharacter, public IAbilitySystemInterface 
+class ACCharacter : public ACharacter, public IAbilitySystemInterface, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -27,6 +28,9 @@ public:
 
 	//Only For Client, To check Is It AICharacter.
 	virtual void PossessedBy(AController* NewController) override;
+
+	//该角色类需要进行网络复制的属性
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 
 protected:
@@ -85,7 +89,7 @@ private:
 	void SetStatusGaugeEnabled(bool bIsEnable);
 
 	/*********************************************************************************************/
-	/*                                  Death                                                    */
+	/*                            Death and Respawn                                              */
 	/*********************************************************************************************/
 private:
 	FTransform MeshRelativeTransform;
@@ -108,4 +112,18 @@ private:
 
 	virtual void OnDeath();
 	virtual void OnRespawn();
+
+	/*********************************************************************************************/
+	/*                                 TeamID                                                    */
+	/*********************************************************************************************/
+public:
+	/** Assigns Team Agent to given TeamID */
+	virtual void SetGenericTeamId(const FGenericTeamId& TeamID) override;
+
+	/** Retrieve team identifier in form of FGenericTeamId */
+	virtual FGenericTeamId GetGenericTeamId() const override;
+
+private:
+	UPROPERTY(Replicated)
+	FGenericTeamId OwningTeamId;
 };

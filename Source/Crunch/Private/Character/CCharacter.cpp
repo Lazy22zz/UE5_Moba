@@ -8,6 +8,7 @@
 #include "GAS/CAbilitySystemComponent.h"
 #include "GAS/CAttributeSet.h"
 #include "CrunchGameplayTags.h"
+#include "Net/UnrealNetwork.h"
 #include "Kismet/GameplayStatics.h"
 #include "Widgets/OverHeadStatsGauge.h"
 
@@ -62,6 +63,12 @@ void ACCharacter::PossessedBy(AController* NewController)
 	{
 		ServerSideInit();
 	}
+}
+
+void ACCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ACCharacter, OwningTeamId);
 }
 
 // 游戏开始/生成时触发
@@ -289,4 +296,14 @@ void ACCharacter::OnDeath()
 // 基类空实现，由子类（如玩家角色）自定义重生逻辑
 void ACCharacter::OnRespawn()
 {
+}
+
+void ACCharacter::SetGenericTeamId(const FGenericTeamId& TeamID)
+{
+	OwningTeamId = TeamID;
+}
+
+FGenericTeamId ACCharacter::GetGenericTeamId() const
+{
+	return OwningTeamId;
 }

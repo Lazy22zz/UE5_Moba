@@ -279,6 +279,16 @@ void ACCharacter::Respawn()
 	// 终止所有正在播放的动画蒙太奇
 	GetMesh()->GetAnimInstance()->StopAllMontages(0.f);
 
+	// 重生在合适的重生点
+	if (HasAuthority() && GetController())
+	{
+		TWeakObjectPtr<AActor> RespawnStartSpot = GetController()->StartSpot;
+		if (RespawnStartSpot.IsValid())
+		{
+			SetActorTransform(RespawnStartSpot->GetActorTransform());
+		}
+	}
+
 	// 启用初始状态的GE
 	if (CAbilitySystemComponent)
 	{

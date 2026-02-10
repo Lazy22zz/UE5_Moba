@@ -7,6 +7,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
+#include "GenericTeamAgentInterface.h"
 #include "CGameplayAbility.generated.h"
 
 /**
@@ -19,5 +20,5 @@ class UCGameplayAbility : public UGameplayAbility
 	
 protected:
 	class UAnimInstance* GetOwnerAnimInstance() const;
-	TArray<FHitResult> GetHitResultFromSweepLocationTargetData(const FGameplayAbilityTargetDataHandle& TargetDataHandle, float SphereSweepRadius = 30.f, bool bDrawDebug = false, bool bIgnoreItself = true)const;
+	TArray<FHitResult> GetHitResultFromSweepLocationTargetData(const FGameplayAbilityTargetDataHandle& TargetDataHandle, float SphereSweepRadius = 30.f, ETeamAttitude::Type TeamType = ETeamAttitude::Hostile , bool bDrawDebug = false, bool bIgnoreItself = true)const;
 };

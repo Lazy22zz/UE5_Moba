@@ -15,11 +15,14 @@ UAnimInstance* UCGameplayAbility::GetOwnerAnimInstance() const
 	return nullptr;
 }
 
+
 // 从 TargetDataHandle 里提取出位置数据，并以这些位置为起点和终点，进行球形扫线检测，返回所有命中的结果
-TArray<FHitResult> UCGameplayAbility::GetHitResultFromSweepLocationTargetData(const FGameplayAbilityTargetDataHandle& TargetDataHandle, float SphereSweepRadius, bool bDrawDebug, bool bIgnoreItself) const
+TArray<FHitResult> UCGameplayAbility::GetHitResultFromSweepLocationTargetData(const FGameplayAbilityTargetDataHandle& TargetDataHandle, float SphereSweepRadius, ETeamAttitude::Type TeamType, bool bDrawDebug, bool bIgnoreItself) const
 {
 	TArray<FHitResult>OutResults; // 最终要返回的「去重后」所有命中结果
 	TSet<AActor*> HitActors; // 用TSet存储已经命中过的Actor，用于去重，保证一个Actor只命中一次
+
+	IGenericTeamAgentInterface* OwnerTeamInterface = Cast<IGenericTeamAgentInterface>(GetAvatarActorFromActorInfo());// 技能持有者的teamtype
 
 	// 遍历「技能的所有目标数据」（一个技能可能有多个瞄准点/目标点）
 	for (const TSharedPtr<FGameplayAbilityTargetData> TargetData : TargetDataHandle.Data)
@@ -40,6 +43,7 @@ TArray<FHitResult> UCGameplayAbility::GetHitResultFromSweepLocationTargetData(co
 			// 如果需要忽略自身 → 把技能的释放者加入忽略列表
 			ActorsToIgnore.Add(GetOwningActorFromActorInfo());
 		}
+
 
 		// 5. 设置：是否绘制调试信息（开发调试用，上线关闭）
 		EDrawDebugTrace::Type DrawDebugType = bDrawDebug ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None;
@@ -70,6 +74,17 @@ TArray<FHitResult> UCGameplayAbility::GetHitResultFromSweepLocationTargetData(co
 			{
 				continue;
 			}
+
+			// 判断是否同teamtype
+			if (OwnerTeamInterface)
+			{
+				ETeamAttitude::Type OtherTeamAttitude = OwnerTeamInterface->GetTeamAttitudeTowards(*Result.GetActor());
+				if (OtherTeamAttitude != TeamType)
+				{
+					continue;
+				}
+			}
+
 			HitActors.Add(Result.GetActor());  // 记录该Actor，标记为「已命中」
 			OutResults.Add(Result);            // 把去重后的有效命中结果，加入最终数组
 		}
@@ -77,5 +92,7 @@ TArray<FHitResult> UCGameplayAbility::GetHitResultFromSweepLocationTargetData(co
 
 	// 9. 返回所有「去重后」的命中结果（一个Actor只出现一次）
 	return OutResults;
-	
 }
+
+
+

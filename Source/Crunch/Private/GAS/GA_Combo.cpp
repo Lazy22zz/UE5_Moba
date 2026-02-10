@@ -151,7 +151,7 @@ void UGA_Combo::DoDamage(FGameplayEventData GameplayData)
 	// 参数说明：
 	// - GameplayData.TargetData：GAS的目标数据，包含本次连击的碰撞检测结果
 	// - true,true：是否忽略自己/是否忽略友好单位，GAS标准写法，避免打自己/队友
-	TArray<FHitResult> HitResults = GetHitResultFromSweepLocationTargetData(GameplayData.TargetData, HitTargetSphereRadius, false, true);
+	TArray<FHitResult> HitResults = GetHitResultFromSweepLocationTargetData(GameplayData.TargetData, HitTargetSphereRadius);
 
 	// 遍历所有命中的目标，逐个施加伤害效果（多段连击可以同时打多个敌人）
 	for (const FHitResult& HitResult : HitResults)

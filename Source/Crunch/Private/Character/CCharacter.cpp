@@ -11,6 +11,8 @@
 #include "Net/UnrealNetwork.h"
 #include "Kismet/GameplayStatics.h"
 #include "Widgets/OverHeadStatsGauge.h"
+#include "Perception/AISense_Sight.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h" 
 
 // 构造函数：设置默认值
 ACCharacter::ACCharacter()
@@ -31,6 +33,9 @@ ACCharacter::ACCharacter()
 
 	// 绑定GAS属性/标签变更委托
 	BindGASChangedDelegate();
+
+	// 创建AI感知刺激源组件（核心作用：让当前Actor能被其他AI的感知系统"检测到"）
+	PerceptionStimuliSourceComponent = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("Perception Stimuli Source Component"));
 }
 
 // 服务端GAS初始化：初始化技能Actor信息、应用初始效果、授予技能
@@ -80,6 +85,9 @@ void ACCharacter::BeginPlay()
 
 	// 记录角色Mesh的初始相对变换（用于重生时恢复位置/旋转）
 	MeshRelativeTransform = GetMesh()->GetRelativeTransform();
+
+	// 给当前角色注册「视觉感知源」
+	PerceptionStimuliSourceComponent->RegisterForSense(UAISense_Sight::StaticClass());
 }
 
 // 每帧Tick（可根据需求关闭）

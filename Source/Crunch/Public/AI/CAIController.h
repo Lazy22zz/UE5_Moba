@@ -19,10 +19,25 @@ public:
 
 	virtual void OnPossess(APawn* NewPawn) override;
 
+	virtual void BeginPlay() override;
+
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "AI Behavior")
+	FName TargetBlackBoardName = "Target";
+
+	UPROPERTY(EditDefaultsOnly, Category = "AI Behavior")
+	class UBehaviorTree* BehaviorTree;
+
 	UPROPERTY(VisibleAnywhere, Category = "Perception")
 	class UAIPerceptionComponent* AIPerceptionComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = "Perception")
 	class UAISenseConfig_Sight* AISenseconfig_sight;
+
+	UFUNCTION()
+	void TargetPerceptionUpdated(AActor* TargetActor, FAIStimulus Stimulus);
+
+	const UObject* GetCurrentSeenTarget() const;
+
+	void SetCurrentSeenTarget(AActor* NewTarget);
 };

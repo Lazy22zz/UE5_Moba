@@ -36,6 +36,9 @@ ACAIController::ACAIController()
 	// --- 6. 绑定感知回调 ---
 	// 注册感知更新事件：当AI看到/丢失目标时，自动调用TargetPerceptionUpdated函数处理逻辑
 	AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &ACAIController::TargetPerceptionUpdated);
+
+	// 注册“遗忘目标”事件：当AI的感知记忆超时（5秒）彻底遗忘目标时，自动调用TargetForgotten函数切换追踪目标
+	AIPerceptionComponent->OnTargetPerceptionForgotten.AddDynamic(this, &ACAIController::TargetForgotten);
 }
 
 void ACAIController::OnPossess(APawn* NewPawn)
@@ -79,9 +82,27 @@ void ACAIController::TargetPerceptionUpdated(AActor* TargetActor, FAIStimulus St
 	}
 	else
 	{
-		// 如果感知丢失，且丢失的目标是当前记录的目标，清空目标
-		if (GetCurrentSeenTarget() == TargetActor)
-			SetCurrentSeenTarget(nullptr);
+		//// 如果感知丢失，且丢失的目标是当前记录的目标，清空目标
+		//if (GetCurrentSeenTarget() == TargetActor)
+		//	SetCurrentSeenTarget(nullptr);
+	}
+}
+
+/**
+ * @brief 当AI忘记某个感知目标时执行的处理函数
+ * @param ForgottonActor 被AI遗忘的目标Actor
+ */
+void ACAIController::TargetForgotten(AActor* ForgottonActor)
+{
+	// 安全检查：如果感知组件为空，直接返回，避免空指针访问
+	if (!AIPerceptionComponent)
+		return;
+
+	// 检查当前AI正在追踪的可见目标是否就是被遗忘的这个Actor
+	if (GetCurrentSeenTarget() == ForgottonActor)
+	{
+		// 如果是，则将当前追踪目标切换为"被遗忘的感知目标"（通常是备用/下一个目标）
+		SetCurrentSeenTarget(GetForgottonPerceptionTarget());
 	}
 }
 
@@ -120,4 +141,30 @@ void ACAIController::SetCurrentSeenTarget(AActor* NewTarget)
 		// 否则将新目标设置到黑板中
 		BlackboardComp->SetValueAsObject(TargetBlackBoardName, NewTarget);
 	}
+}
+
+/**
+ * @brief 获取AI感知组件中第一个敌对感知目标（用于遗忘当前目标后切换）
+ * @return 返回第一个感知到的敌对Actor；若无感知组件/无敌对目标，返回nullptr
+ */
+AActor* ACAIController::GetForgottonPerceptionTarget() const
+{
+	// 安全检查：感知组件存在时才执行后续逻辑
+	if (AIPerceptionComponent)
+	{
+		// 定义数组存储感知到的所有敌对Actor
+		TArray<AActor*> TargetLists;
+		// 从感知组件中获取所有被标记为“敌对”的感知目标，存入数组
+		AIPerceptionComponent->GetPerceivedHostileActors(TargetLists);
+
+		// 检查数组中是否有有效的敌对目标
+		if (TargetLists.Num() != 0)
+		{
+			// 返回数组中第一个敌对目标（作为遗忘当前目标后的备选目标）
+			return TargetLists[0];
+		}
+	}
+
+	// 无感知组件/无敌对目标时，返回空指针
+	return nullptr;
 }

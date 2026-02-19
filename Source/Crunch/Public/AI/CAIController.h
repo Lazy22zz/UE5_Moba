@@ -37,7 +37,12 @@ private:
 	UFUNCTION()
 	void TargetPerceptionUpdated(AActor* TargetActor, FAIStimulus Stimulus);
 
+	UFUNCTION()
+	void TargetForgotten(AActor* ForgottonActor);
+
 	const UObject* GetCurrentSeenTarget() const;
 
 	void SetCurrentSeenTarget(AActor* NewTarget);
+
+	AActor* GetForgottonPerceptionTarget() const;
 };

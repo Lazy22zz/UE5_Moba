@@ -106,7 +106,7 @@ void ACAIController::TargetForgotten(AActor* ForgottonActor)
 	if (GetCurrentSeenTarget() == ForgottonActor)
 	{
 		// 如果是，则将当前追踪目标切换为"被遗忘的感知目标"（通常是备用/下一个目标）
-		SetCurrentSeenTarget(GetForgottonPerceptionTarget());
+		SetCurrentSeenTarget(GetFirstSensedPerceptionTarget());
 	}
 }
 
@@ -151,7 +151,7 @@ void ACAIController::SetCurrentSeenTarget(AActor* NewTarget)
  * @brief 获取AI感知组件中第一个敌对感知目标（用于遗忘当前目标后切换）
  * @return 返回第一个感知到的敌对Actor；若无感知组件/无敌对目标，返回nullptr
  */
-AActor* ACAIController::GetForgottonPerceptionTarget() const
+AActor* ACAIController::GetFirstSensedPerceptionTarget() const
 {
 	// 安全检查：感知组件存在时才执行后续逻辑
 	if (AIPerceptionComponent)
@@ -186,6 +186,9 @@ void ACAIController::ForgetIfTargetIsDead(AActor* TargetToForgot)
 	// 2. 检查目标身上是否有“死亡”的GameplayTag
 	if (TargetASC->HasMatchingGameplayTag(CrunchGameplayTags::Status_Dead))
 	{
+		/* 
+		
+		老师推荐的通过age 最大化让系统忘记
 		//3. 打开AI脑海里的“感知记事本”（类似C++的 TMap<AActor*, 综合感知档案>）
 		//Iter->Key 是被感知的具体Actor
 		// Iter->Value 是该Actor留下的所有感知情报
@@ -205,6 +208,24 @@ void ACAIController::ForgetIfTargetIsDead(AActor* TargetToForgot)
 				// 下一帧引擎检测时，会发现这些记忆严重“超时/过期 (Expired)”
 				// 从而触发底层的 MarkExpired 流程，让AI彻底忘掉他
 				Stimulus.SetStimulusAge(TNumericLimits<float>::Max());
+			}
+		}
+		*/
+
+		// 这里利用了GetFirstSensedPerceptionTarget()的AIPerceptionComponent->GetPerceivedHostileActors(TargetLists)
+		// 里的GetHostileActors(), 因为ForgetActor()有自清理功能。
+
+		if (AIPerceptionComponent)
+		{
+			// 官方 API：直接让感知组件遗忘这个 Actor
+			AIPerceptionComponent->ForgetActor(TargetToForgot);
+			
+			// 2. 【核心修复】手动检查并清理黑板！
+			// 如果当前黑板里锁定的目标，正好是这个刚死的 Actor，就立刻清空或切换
+			if (GetCurrentSeenTarget() == TargetToForgot)
+			{
+			// 尝试寻找下一个活着的敌人，如果没有就会自动传入 nullptr 清空黑板
+				SetCurrentSeenTarget(GetFirstSensedPerceptionTarget());
 			}
 		}
 	}

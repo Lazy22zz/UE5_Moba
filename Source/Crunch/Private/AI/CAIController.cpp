@@ -6,6 +6,10 @@
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
+#include "CrunchGameplayTags.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
 
 ACAIController::ACAIController()
 {
@@ -82,9 +86,9 @@ void ACAIController::TargetPerceptionUpdated(AActor* TargetActor, FAIStimulus St
 	}
 	else
 	{
-		//// 如果感知丢失，且丢失的目标是当前记录的目标，清空目标
-		//if (GetCurrentSeenTarget() == TargetActor)
-		//	SetCurrentSeenTarget(nullptr);
+		// 如果感知丢失，且死亡的目标是当前记录的目标，清空目标
+		ForgetIfTargetIsDead(TargetActor);
+		
 	}
 }
 
@@ -167,4 +171,41 @@ AActor* ACAIController::GetForgottonPerceptionTarget() const
 
 	// 无感知组件/无敌对目标时，返回空指针
 	return nullptr;
+}
+
+// AI遗忘已经感知到的死亡actor
+void ACAIController::ForgetIfTargetIsDead(AActor* TargetToForgot)
+{
+	// 1. 获取目标的技能系统组件(ASC)，这是判断生死状态的前提
+	const UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetToForgot);
+	if (!TargetASC)
+	{
+		return; // 如果目标连ASC都没有（比如是个没有生命值的石头），直接跳过
+	}
+
+	// 2. 检查目标身上是否有“死亡”的GameplayTag
+	if (TargetASC->HasMatchingGameplayTag(CrunchGameplayTags::Status_Dead))
+	{
+		//3. 打开AI脑海里的“感知记事本”（类似C++的 TMap<AActor*, 综合感知档案>）
+		//Iter->Key 是被感知的具体Actor
+		// Iter->Value 是该Actor留下的所有感知情报
+		for (UAIPerceptionComponent::TActorPerceptionContainer::TIterator Iter = AIPerceptionComponent->GetPerceptualDataIterator(); Iter; ++Iter)
+		{
+			// 如果这一页记录的不是我们要找的死者，翻到下一页
+			if (Iter->Key != TargetToForgot)
+			{
+				continue;
+			}
+
+			// 4. 找到了死者的档案！遍历他留下的所有“感官刺激原件”（视觉、听觉等）
+			// 注意：必须用 &（引用）来直接修改底层真实数据，否则改的只是复印件
+			for (FAIStimulus& Stimulus : Iter->Value.LastSensedStimuli)
+			{
+				// 5. 核心黑科技：把这些感官记忆的“存在时间”强行改成浮点数最大值
+				// 下一帧引擎检测时，会发现这些记忆严重“超时/过期 (Expired)”
+				// 从而触发底层的 MarkExpired 流程，让AI彻底忘掉他
+				Stimulus.SetStimulusAge(TNumericLimits<float>::Max());
+			}
+		}
+	}
 }

@@ -264,6 +264,9 @@ void ACCharacter::StartDeathSequence()
 
 	// 关闭胶囊体碰撞（避免死亡后角色被碰撞、阻挡）
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	// 关闭AI感知
+	SetAIPerceptionStimuliSourceEnabled(false);
 }
 
 // 角色重生逻辑
@@ -302,6 +305,9 @@ void ACCharacter::Respawn()
 	{
 		CAbilitySystemComponent->ApplyFullStatEffect();
 	}
+
+	// 开启AI感知
+	SetAIPerceptionStimuliSourceEnabled(true);
 }
 
 // 死亡回调函数（虚函数，供子类重写）
@@ -324,4 +330,21 @@ void ACCharacter::SetGenericTeamId(const FGenericTeamId& TeamID)
 FGenericTeamId ACCharacter::GetGenericTeamId() const
 {
 	return OwningTeamId;
+}
+
+void ACCharacter::SetAIPerceptionStimuliSourceEnabled(bool bIsEnabled)
+{
+	if (!PerceptionStimuliSourceComponent)
+	{
+		return;
+	}
+
+	if (!bIsEnabled)
+	{
+		PerceptionStimuliSourceComponent->UnregisterFromPerceptionSystem();
+	}
+	else
+	{
+		PerceptionStimuliSourceComponent->RegisterWithPerceptionSystem();
+	}
 }

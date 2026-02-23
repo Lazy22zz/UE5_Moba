@@ -45,4 +45,6 @@ private:
 	void SetCurrentSeenTarget(AActor* NewTarget);
 
 	AActor* GetForgottonPerceptionTarget() const;
+
+	void ForgetIfTargetIsDead(AActor* TargetToForgot);
 };

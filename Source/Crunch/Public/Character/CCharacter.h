@@ -134,4 +134,6 @@ private:
 private:
 	UPROPERTY()
 	class UAIPerceptionStimuliSourceComponent* PerceptionStimuliSourceComponent;
+
+	void SetAIPerceptionStimuliSourceEnabled(bool bIsEnabled);
 };

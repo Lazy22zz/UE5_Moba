@@ -88,6 +88,9 @@ private:
 	void UpdateHeadGaugeVisibility();
 	void SetStatusGaugeEnabled(bool bIsEnable);
 
+	void RegisterUIComponent();
+	void UnRegisterUIComponent();
+
 	/*********************************************************************************************/
 	/*                            Death and Respawn                                              */
 	/*********************************************************************************************/

@@ -4,6 +4,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Subsystems/HealthUIManagerSubsystem.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GAS/CAbilitySystemComponent.h"
 #include "GAS/CAttributeSet.h"
@@ -13,17 +14,25 @@
 #include "Widgets/OverHeadStatsGauge.h"
 #include "Perception/AISense_Sight.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h" 
+#include "Stats/Stats.h"
+
+// 统一改成 OOP
+DECLARE_STATS_GROUP(TEXT("MyOOP_Stats"), STATGROUP_MyOOP, STATCAT_Advanced);
+DECLARE_CYCLE_STAT(TEXT("Character OOP Tick Update"), STAT_OOPUpdate, STATGROUP_MyOOP);
+
 
 // 构造函数：设置默认值
 ACCharacter::ACCharacter()
 {
  	// 开启每帧Tick（可关闭以提升性能）
 	PrimaryActorTick.bCanEverTick = true;
+
 	// 网格体关闭碰撞
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	// 创建GAS核心组件：技能系统组件
 	CAbilitySystemComponent = CreateDefaultSubobject<UCAbilitySystemComponent>("CAbility System Component");
+
 	// 创建GAS属性集组件
 	CAttributeSet = CreateDefaultSubobject<UCAttributeSet>("CAttribute Set");
 
@@ -80,6 +89,9 @@ void ACCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 void ACCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	RegisterUIComponent();
+
 	// 配置头顶Widget（显示/隐藏、绑定数据等）
 	ConfigureOverHeadWidget();
 
@@ -88,12 +100,16 @@ void ACCharacter::BeginPlay()
 
 	// 给当前角色注册「视觉感知源」
 	PerceptionStimuliSourceComponent->RegisterForSense(UAISense_Sight::StaticClass());
+
 }
 
 // 每帧Tick（可根据需求关闭）
 void ACCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	//GetWorld()->GetSubsystem<UHealthUIManagerSubsystem>()->BachUpdateWidgets();
+
 }
 
 // 绑定输入（此处为默认实现，需自定义补充）
@@ -148,32 +164,41 @@ void ACCharacter::ConfigureOverHeadWidget()
 		OverHeadWidgetComponent->SetHiddenInGame(false);
 		GetWorldTimerManager().ClearTimer(HeadStatGaugeVisibilityUpdateTimerHandle);
 		GetWorldTimerManager().SetTimer(HeadStatGaugeVisibilityUpdateTimerHandle, this, &ACCharacter::UpdateHeadGaugeVisibility, HeadStatGaugeVisiblittyCheckUpdateGap, true);
+
 	}
 }
 
-// 更新头顶血条的缩放和可见性（根据与本地玩家的距离）
+/*BachUpdate() 重复了*/
+
+//// 更新头顶血条的缩放和可见性（根据与本地玩家的距离）
 void ACCharacter::UpdateHeadGaugeVisibility()
 {
-	APawn* LocalPlayerPawn = UGameplayStatics::GetPlayerPawn(this, 0);
-	if (LocalPlayerPawn)
-	{
-		// 计算与本地玩家的距离平方（减少开方运算，提升性能）
-		float DistSquared = FVector::DistSquared(GetActorLocation(), LocalPlayerPawn->GetActorLocation());
 
-		// 根据距离映射缩放值（距离越远，缩放越小）
-		float NewScale = FMath::GetMappedRangeValueClamped(
-			FVector2D(0.0f, HeadStatGaugeVisibilityRangeSquared),
-			FVector2D(MaxScale, MinScale), 
-			DistSquared
-		);
+	//SCOPE_CYCLE_COUNTER(STAT_OOPUpdate);
 
-		// 设置血条Widget缩放
-		FVector2D ScaleVector2D(NewScale);
-		Cast<UOverHeadStatsGauge>(OverHeadWidgetComponent->GetUserWidgetObject())->SetRenderScale(ScaleVector2D);
+	//APawn* LocalPlayerPawn = UGameplayStatics::GetPlayerPawn(this, 0);
+	//if (LocalPlayerPawn)
+	//{
+	//	// 计算与本地玩家的距离平方（减少开方运算，提升性能）
+	//	float DistSquared = FVector::DistSquared(GetActorLocation(), LocalPlayerPawn->GetActorLocation());
 
-		// 距离超过阈值则隐藏Widget
-		OverHeadWidgetComponent->SetHiddenInGame(DistSquared > HeadStatGaugeVisibilityRangeSquared);
-	}
+	//	// 根据距离映射缩放值（距离越远，缩放越小）
+	//	float NewScale = FMath::GetMappedRangeValueClamped(
+	//		FVector2D(0.0f, HeadStatGaugeVisibilityRangeSquared),
+	//		FVector2D(MaxScale, MinScale), 
+	//		DistSquared
+	//	);
+
+	//	// 设置血条Widget缩放
+	//	FVector2D ScaleVector2D(NewScale);
+	//	Cast<UOverHeadStatsGauge>(OverHeadWidgetComponent->GetUserWidgetObject())->SetRenderScale(ScaleVector2D);
+
+	//	// 距离超过阈值则隐藏Widget
+	//	OverHeadWidgetComponent->SetHiddenInGame(DistSquared > HeadStatGaugeVisibilityRangeSquared);
+	//}
+
+	//GetWorld()->GetSubsystem<UHealthUIManagerSubsystem>()->BachUpdateWidgets();
+
 }
 
 // 设置状态血条（状态栏）的启用/禁用状态
@@ -194,6 +219,30 @@ void ACCharacter::SetStatusGaugeEnabled(bool bIsEnable)
 	{
 		// 将头顶UI组件在游戏中隐藏
 		OverHeadWidgetComponent->SetHiddenInGame(true);
+	}
+}
+
+ //注册对应人物的ui信息
+void ACCharacter::RegisterUIComponent()
+{
+	if (UWorld* World = GetWorld())
+	{
+		if (UHealthUIManagerSubsystem* UIManager = World->GetSubsystem<UHealthUIManagerSubsystem>())
+		{
+			UIManager->RegisterWidget(OverHeadWidgetComponent, this);
+		}
+	}
+}
+
+ //删除已死亡人物的ui信息
+void ACCharacter::UnRegisterUIComponent()
+{
+	if (UWorld* World = GetWorld())
+	{
+		if (UHealthUIManagerSubsystem* UIManager = World->GetSubsystem<UHealthUIManagerSubsystem>())
+		{
+			UIManager->UnregisterWidget(OverHeadWidgetComponent);
+		}
 	}
 }
 
@@ -267,6 +316,9 @@ void ACCharacter::StartDeathSequence()
 
 	// 关闭AI感知
 	SetAIPerceptionStimuliSourceEnabled(false);
+
+	// 撤销人物ui信息
+	UnRegisterUIComponent();
 }
 
 // 角色重生逻辑

@@ -108,8 +108,6 @@ void ACCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//GetWorld()->GetSubsystem<UHealthUIManagerSubsystem>()->BachUpdateWidgets();
-
 }
 
 // 绑定输入（此处为默认实现，需自定义补充）
@@ -196,8 +194,6 @@ void ACCharacter::UpdateHeadGaugeVisibility()
 	//	// 距离超过阈值则隐藏Widget
 	//	OverHeadWidgetComponent->SetHiddenInGame(DistSquared > HeadStatGaugeVisibilityRangeSquared);
 	//}
-
-	//GetWorld()->GetSubsystem<UHealthUIManagerSubsystem>()->BachUpdateWidgets();
 
 }
 

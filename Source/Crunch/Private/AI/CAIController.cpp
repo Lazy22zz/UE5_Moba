@@ -5,6 +5,7 @@
 #include "Character/CCharacter.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
+#include "BehaviorTree/BehaviorTreeComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
@@ -60,6 +61,14 @@ void ACAIController::OnPossess(APawn* NewPawn)
 	{
 		TeamAgentInterface->SetGenericTeamId(GetGenericTeamId());
 	}
+
+	// 3. 使用delegate绑定gameplaytag和对应的行为
+	UAbilitySystemComponent* AIPawnASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(NewPawn);
+	if (AIPawnASC)
+	{
+		AIPawnASC->RegisterGameplayTagEvent(CrunchGameplayTags::Status_Dead).AddUObject(this, &ACAIController::AIPawnDeadTagUpdate);
+	}
+
 }
 
 // AI控制器开始运行时的初始化函数
@@ -230,3 +239,71 @@ void ACAIController::ForgetIfTargetIsDead(AActor* TargetToForgot)
 		}
 	}
 }
+
+/**
+ * @brief 清空AI感知信息并禁用所有感知能力
+ * @details 该函数会将所有已感知的刺激信息标记为过期，并禁用AI的所有感知类型（如视觉、听觉等）
+ */
+void ACAIController::ClearAndDisableSenses()
+{
+	// 检查AI感知组件是否有效
+	if (AIPerceptionComponent)
+	{
+		// 将所有已感知的刺激信息设置为最大过期时间，使其立即失效
+		AIPerceptionComponent->AgeStimuli(TNumericLimits<float>::Max());
+
+		// 遍历AI感知组件中所有已配置的感知类型
+		for (auto SenseConfigIt = AIPerceptionComponent->GetSensesConfigIterator(); SenseConfigIt; ++SenseConfigIt)
+		{
+			// 禁用当前遍历到的感知类型（如视觉、听觉、嗅觉等）
+			AIPerceptionComponent->SetSenseEnabled((*SenseConfigIt)->GetSenseImplementation(), false);
+		}
+	}
+
+	// 获取黑板组件并检查有效性
+	if (UBlackboardComponent* BlackboardComp = GetBlackboardComponent())
+	{
+		// 清空黑板上的目标变量（通常用于存储AI追踪的目标）
+		BlackboardComp->ClearValue(TargetBlackBoardName);
+	}
+}
+
+/**
+ * @brief 启用AI所有已配置的感知能力
+ * @details 重新激活AI的所有感知类型，恢复其感知环境的能力
+ */
+void ACAIController::EnableAllSenses()
+{
+	// 遍历AI感知组件中所有已配置的感知类型
+	for (auto SenseConfigIt = AIPerceptionComponent->GetSensesConfigIterator(); SenseConfigIt; ++SenseConfigIt)
+	{
+		// 启用当前遍历到的感知类型
+		AIPerceptionComponent->SetSenseEnabled((*SenseConfigIt)->GetSenseImplementation(), true);
+	}
+}
+
+/**
+ * @brief 根据AI死亡标签的计数更新AI行为状态
+ * @param gameplayTag 触发的游戏标签（此处为AI死亡标签）
+ * @param count 标签计数（非0表示死亡，0表示复活/未死亡）
+ */
+void ACAIController::AIPawnDeadTagUpdate(FGameplayTag gameplayTag, int32 count)
+{
+	// 如果计数非0，说明AI已死亡
+	if (count != 0)
+	{
+		// 停止AI的行为逻辑，并添加调试说明
+		GetBrainComponent()->StopLogic("AI Pawn is dead!");
+		// 清空感知信息并禁用所有感知能力
+		ClearAndDisableSenses();
+	}
+	else
+	{
+		// 计数为0，说明AI复活/未死亡，重新启动AI行为逻辑
+		GetBrainComponent()->StartLogic();
+		// 重新启用所有感知能力
+		EnableAllSenses();
+	}
+}
+
+

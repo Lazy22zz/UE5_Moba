@@ -296,6 +296,13 @@ void ACCharacter::StartDeathSequence()
 	// 触发死亡回调（供子类重写，实现个性化死亡逻辑）
 	OnDeath();
 
+	// cancel所有即时的GAS
+	if (CAbilitySystemComponent)
+	{
+		CAbilitySystemComponent->CancelAllAbilities();
+	}
+
+
 	// 播放死亡动画
 	PlayDeathAnimation();
 

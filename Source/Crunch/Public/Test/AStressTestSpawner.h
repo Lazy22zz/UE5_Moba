@@ -26,7 +26,7 @@ public:
 
 	// 生成数量（先从 1000 开始，再挑战 5000）
 	UPROPERTY(EditAnywhere, Category = "Stress Test")
-	int32 SpawnCount = 3000;
+	int32 SpawnCount = 1000;
 
 	// 生成范围的半径
 	UPROPERTY(EditAnywhere, Category = "Stress Test")

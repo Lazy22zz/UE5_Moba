@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "GameplayTagContainer.h"
 #include "CAIController.generated.h"
 
 /**
@@ -47,4 +48,10 @@ private:
 	AActor* GetFirstSensedPerceptionTarget() const;
 
 	void ForgetIfTargetIsDead(AActor* TargetToForgot);
+
+	void ClearAndDisableSenses();
+
+	void EnableAllSenses();
+
+	void AIPawnDeadTagUpdate(FGameplayTag gameplayTag, int32 count);
 };

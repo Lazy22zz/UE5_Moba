@@ -172,28 +172,28 @@ void ACCharacter::ConfigureOverHeadWidget()
 void ACCharacter::UpdateHeadGaugeVisibility()
 {
 
-	//SCOPE_CYCLE_COUNTER(STAT_OOPUpdate);
+	SCOPE_CYCLE_COUNTER(STAT_OOPUpdate);
 
-	//APawn* LocalPlayerPawn = UGameplayStatics::GetPlayerPawn(this, 0);
-	//if (LocalPlayerPawn)
-	//{
-	//	// 计算与本地玩家的距离平方（减少开方运算，提升性能）
-	//	float DistSquared = FVector::DistSquared(GetActorLocation(), LocalPlayerPawn->GetActorLocation());
+	APawn* LocalPlayerPawn = UGameplayStatics::GetPlayerPawn(this, 0);
+	if (LocalPlayerPawn)
+	{
+		// 计算与本地玩家的距离平方（减少开方运算，提升性能）
+		float DistSquared = FVector::DistSquared(GetActorLocation(), LocalPlayerPawn->GetActorLocation());
 
-	//	// 根据距离映射缩放值（距离越远，缩放越小）
-	//	float NewScale = FMath::GetMappedRangeValueClamped(
-	//		FVector2D(0.0f, HeadStatGaugeVisibilityRangeSquared),
-	//		FVector2D(MaxScale, MinScale), 
-	//		DistSquared
-	//	);
+		// 根据距离映射缩放值（距离越远，缩放越小）
+		float NewScale = FMath::GetMappedRangeValueClamped(
+			FVector2D(0.0f, HeadStatGaugeVisibilityRangeSquared),
+			FVector2D(MaxScale, MinScale), 
+			DistSquared
+		);
 
-	//	// 设置血条Widget缩放
-	//	FVector2D ScaleVector2D(NewScale);
-	//	Cast<UOverHeadStatsGauge>(OverHeadWidgetComponent->GetUserWidgetObject())->SetRenderScale(ScaleVector2D);
+		// 设置血条Widget缩放
+		FVector2D ScaleVector2D(NewScale);
+		Cast<UOverHeadStatsGauge>(OverHeadWidgetComponent->GetUserWidgetObject())->SetRenderScale(ScaleVector2D);
 
-	//	// 距离超过阈值则隐藏Widget
-	//	OverHeadWidgetComponent->SetHiddenInGame(DistSquared > HeadStatGaugeVisibilityRangeSquared);
-	//}
+		// 距离超过阈值则隐藏Widget
+		OverHeadWidgetComponent->SetHiddenInGame(DistSquared > HeadStatGaugeVisibilityRangeSquared);
+	}
 
 }
 
@@ -385,6 +385,11 @@ void ACCharacter::SetGenericTeamId(const FGenericTeamId& TeamID)
 FGenericTeamId ACCharacter::GetGenericTeamId() const
 {
 	return OwningTeamId;
+}
+
+void ACCharacter::OnRep_TeamID()
+{
+	// overide by subclass
 }
 
 void ACCharacter::SetAIPerceptionStimuliSourceEnabled(bool bIsEnabled)

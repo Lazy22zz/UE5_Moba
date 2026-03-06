@@ -127,9 +127,11 @@ public:
 	virtual FGenericTeamId GetGenericTeamId() const override;
 
 private:
-	UPROPERTY(Replicated)
+	UPROPERTY(ReplicatedUsing = OnRep_TeamID)
 	FGenericTeamId OwningTeamId;
 
+	UFUNCTION()
+	virtual void OnRep_TeamID();
 	/*********************************************************************************************/
 	/*                                UI Component                                               */
 	/*********************************************************************************************/
